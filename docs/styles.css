@@ -1,28 +1,74 @@
-
 /* SPDX-License-Identifier: MIT */
 
-/* ============================
-   Base Layout + Spacing Fixes
-   ============================ */
+/* ------------------------------------------------------------
+   Speculative Trade Generator — Styles (no build step)
+   Matches current docs/index.html + app.js DOM output.
+------------------------------------------------------------ */
+
+/* -------- Theme Tokens -------- */
 
 :root {
   --max-width: 1100px;
+
+  --bg0: #0b0c10;
+  --bg1: #0f1220;
+  --panel: rgba(255, 255, 255, 0.06);
+  --panel2: rgba(255, 255, 255, 0.08);
+  --border: rgba(255, 255, 255, 0.10);
+
+  --text: rgba(255, 255, 255, 0.92);
+  --muted: rgba(255, 255, 255, 0.65);
+
+  --shadow: 0 16px 50px rgba(0, 0, 0, 0.45);
+  --radius: 16px;
 }
+
+html[data-theme="light"] {
+  --bg0: #f5f6fb;
+  --bg1: #eef0f7;
+  --panel: rgba(0, 0, 0, 0.05);
+  --panel2: rgba(0, 0, 0, 0.07);
+  --border: rgba(0, 0, 0, 0.10);
+
+  --text: rgba(0, 0, 0, 0.88);
+  --muted: rgba(0, 0, 0, 0.60);
+
+  --shadow: 0 14px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* -------- Base / Layout -------- */
+
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
   padding: 0;
+  color: var(--text);
   font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background:
+    radial-gradient(1200px 600px at 20% 10%, rgba(115, 60, 255, 0.25), transparent 55%),
+    radial-gradient(1000px 600px at 85% 25%, rgba(0, 200, 160, 0.18), transparent 55%),
+    linear-gradient(180deg, var(--bg1), var(--bg0));
+  min-height: 100vh;
 }
 
-/* Header breathing room */
-.topbar {
-  padding: 32px 24px 24px 24px;
-}
-
-.topbar-inner {
+.container {
   max-width: var(--max-width);
   margin: 0 auto;
+  padding: 0 24px;
+}
+
+.page {
+  padding: 0 0 64px 0;
+}
+
+/* -------- Header -------- */
+
+.topbar {
+  padding: 28px 0 18px 0;
+}
+
+.header-inner {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -30,62 +76,305 @@ body {
 }
 
 .brand {
-  max-width: 720px;
+  max-width: 760px;
 }
 
-.topbar-actions {
+.brand h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.subtitle {
+  margin: 8px 0 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.header-actions {
   display: flex;
   gap: 10px;
   align-items: center;
+  flex-wrap: wrap;
 }
 
-/* Lighter utility buttons */
+/* -------- Cards -------- */
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 22px 22px;
+  margin: 18px 0;
+  backdrop-filter: blur(10px);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.card h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.card h3 {
+  margin: 6px 0 10px 0;
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--text);
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+/* -------- Mode Controls -------- */
+
+.mode-toggle {
+  display: inline-flex;
+  gap: 8px;
+  padding: 6px;
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+
+.mode-toggle button {
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.mode-toggle button[aria-selected="true"] {
+  background: rgba(120, 90, 255, 0.20);
+  border-color: rgba(120, 90, 255, 0.35);
+  color: var(--text);
+}
+
+.mode-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-top: 6px;
+}
+
+.trade-codes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 10px 0 10px 0;
+}
+
+/* This class is injected by app.js when it renders checkboxes. */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  user-select: none;
+}
+
+.pill input {
+  margin: 0;
+}
+
+/* Inputs */
+label {
+  display: block;
+  margin: 10px 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+input[type="number"],
+select {
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.18);
+  color: var(--text);
+  outline: none;
+}
+
+html[data-theme="light"] input[type="number"],
+html[data-theme="light"] select {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+input[type="checkbox"] {
+  accent-color: rgba(120, 90, 255, 0.95);
+}
+
+.action-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  align-items: center;
+}
+
+/* -------- Buttons -------- */
+
 .btn-ghost {
   background: transparent;
-  border: 1px solid rgba(255,255,255,0.15);
-  padding: 6px 12px;
-  font-size: 14px;
-  border-radius: 8px;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 7px 12px;
+  font-size: 13px;
+  border-radius: 10px;
   cursor: pointer;
 }
 
-/* Page container spacing */
-.page {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 0 24px 60px 24px;
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.06);
 }
 
-/* Card breathing room */
-.card {
-  margin-bottom: 28px;
-  padding: 24px;
+.btn-primary {
+  background: rgba(120, 90, 255, 0.85);
+  border: 1px solid rgba(120, 90, 255, 0.85);
+  color: #fff;
+  padding: 8px 14px;
+  font-size: 13px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: rgba(120, 90, 255, 0.95);
+}
+
+/* -------- Advanced Panel -------- */
+
+.advanced-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 14px;
+  margin-top: 10px;
+}
+
+.advanced-grid label {
+  margin: 0;
+}
+
+/* -------- Results -------- */
+
+#results {
+  margin-top: 12px;
+}
+
+.result {
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
   border-radius: 14px;
+  padding: 14px 14px;
+  margin: 12px 0;
 }
 
-/* Improve mobile stacking */
-@media (max-width: 768px) {
-
-  .topbar-inner {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-  }
-
-  .topbar-actions {
-    flex-wrap: wrap;
-  }
-
-  .page {
-    padding: 0 16px 60px 16px;
-  }
-
-  .card {
-    padding: 20px;
-  }
+.result-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
 }
 
-/* NOTICE modal formatting */
+.result-title {
+  font-weight: 750;
+  font-size: 15px;
+  margin-bottom: 2px;
+}
+
+.badge {
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(40, 220, 140, 0.35);
+  background: rgba(40, 220, 140, 0.12);
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.badge-warn {
+  border-color: rgba(255, 170, 0, 0.35);
+  background: rgba(255, 170, 0, 0.14);
+}
+
+.kv {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 8px 12px;
+  margin-top: 10px;
+}
+
+.k {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.v {
+  font-size: 13px;
+}
+
+/* -------- Modal -------- */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 50;
+}
+
+.modal {
+  width: min(760px, 100%);
+  max-height: min(80vh, 900px);
+  overflow: auto;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--bg1) 85%, black 15%);
+  box-shadow: var(--shadow);
+  padding: 14px 14px;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.modal-header h3 {
+  margin: 0;
+}
+
+#modalBody {
+  color: var(--text);
+}
+
 .notice-pre {
   white-space: pre-wrap;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -93,4 +382,28 @@ body {
   line-height: 1.4;
   padding: 12px;
   border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.20);
+}
+
+/* -------- Responsive -------- */
+
+@media (max-width: 860px) {
+  .header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .mode-grid {
+    grid-template-columns: 1fr;
+  }
+  .kv {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .container { padding: 0 16px; }
+  .brand h1 { font-size: 24px; }
+  .card { padding: 18px; }
+  .advanced-grid { grid-template-columns: 1fr; }
 }

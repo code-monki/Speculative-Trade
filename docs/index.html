@@ -2,132 +2,156 @@
 <!-- SPDX-License-Identifier: MIT -->
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Speculative Trade Generator</title>
-  <link rel="stylesheet" href="./styles.css" />
+  <meta name="description" content="Loads trade tables from JSON and generates lots via 1D6 column + 1D6 row.">
+  <link rel="stylesheet" href="./styles.css">
 </head>
-<body>
-  <header class="site-header">
-    <div class="container header-row">
-      <div class="brand">
-        <div class="brand-title">Speculative Trade Generator</div>
-        <div class="brand-sub">Loads trade tables from JSON and generates lots via 1D6 column + 1D6 row.</div>
-      </div>
 
-      <div class="header-actions">
-        <button id="themeToggle" class="btn btn-ghost" type="button" title="Toggle light/dark">Theme</button>
+<body>
+
+<header class="topbar">
+  <div class="container header-inner">
+    <div class="brand">
+      <h1>Speculative Trade Generator</h1>
+      <p class="subtitle">
+        Loads trade tables from JSON and generates lots via 1D6 column + 1D6 row.
+      </p>
+    </div>
+
+    <nav class="header-actions" aria-label="Primary">
+      <button id="btnAbout" class="btn-ghost" type="button">About</button>
+      <button id="btnHelp" class="btn-ghost" type="button">Help</button>
+      <button id="btnLegal" class="btn-ghost" type="button">Legal</button>
+      <button id="themeToggle" class="btn-ghost" type="button">Theme</button>
+    </nav>
+  </div>
+</header>
+
+<main class="page container">
+
+  <!-- MODE CARD -->
+  <section class="card">
+    <div class="card-header">
+      <h2>Mode</h2>
+      <div class="mode-toggle">
+        <button id="modeMinimal" type="button">Minimal</button>
+        <button id="modeAdvanced" type="button">Advanced</button>
       </div>
     </div>
-  </header>
 
-  <main class="container">
-    <section class="card">
-      <div class="card-h">
-        <h2>Mode</h2>
-        <div class="segmented" role="tablist" aria-label="Mode selector">
-          <button class="segbtn" id="modeMinimal" type="button" role="tab" aria-selected="true">Minimal</button>
-          <button class="segbtn" id="modeAdvanced" type="button" role="tab" aria-selected="false">Advanced</button>
+    <div class="mode-grid">
+      <div>
+        <h3>World trade codes</h3>
+
+        <div id="tradeCodeBox" class="trade-codes">
+          <label><input type="checkbox" value="Ind"> Ind</label>
+          <label><input type="checkbox" value="nInd"> nInd</label>
+          <label><input type="checkbox" value="Ag"> Ag</label>
+          <label><input type="checkbox" value="Desert"> Desert</label>
+          <label><input type="checkbox" value="Water"> Water</label>
+          <label><input type="checkbox" value="Vacc"> Vacc</label>
         </div>
+
+        <p class="muted">
+          Select the world’s trade codes. Column rolls that don’t match a selected trade code fall back to None.
+        </p>
       </div>
 
-      <div class="grid-2">
-        <div>
-          <h3>World trade codes</h3>
-          <div class="pillbox" id="tradeCodeBox"></div>
-          <div class="hint">Select the world’s trade codes. Column rolls that don’t match a selected trade code fall back to <span class="mono">None</span>.</div>
-        </div>
+      <div>
+        <h3>Generation</h3>
 
-        <div>
-          <h3>Generation</h3>
-          <div class="form-row">
-            <label for="rollCount">Number of lots</label>
-            <input id="rollCount" type="number" min="1" max="50" value="6" />
-          </div>
+        <label>
+          Number of lots
+          <input id="rollCount" type="number" min="1" max="50" value="6">
+        </label>
 
-          <div class="form-row">
-            <label for="lawLevel">Law Level (for legality checks)</label>
-            <input id="lawLevel" type="number" min="0" max="15" value="0" />
-          </div>
+        <label>
+          Law Level (for legality checks)
+          <input id="lawLevel" type="number" min="0" max="15" value="0">
+        </label>
 
-          <div class="form-row">
-            <label class="check">
-              <input id="useRandom" type="checkbox" checked />
-              <span>Use random dice (otherwise, prompts per roll)</span>
-            </label>
-          </div>
+        <label>
+          <input id="useRandom" type="checkbox" checked>
+          Use random dice (otherwise, prompts per roll)
+        </label>
 
-          <div class="form-actions">
-            <button id="btnGenerate" class="btn btn-primary" type="button">Generate</button>
-            <button id="btnClear" class="btn btn-ghost" type="button">Clear</button>
-          </div>
+        <div class="action-row">
+          <button id="btnGenerate" class="btn-primary" type="button">Generate</button>
+          <button id="btnClear" class="btn-ghost" type="button">Clear</button>
         </div>
       </div>
+    </div>
 
-      <div id="advancedPanel" class="advanced-panel" hidden>
-        <hr class="sep" />
-        <h3>Advanced inputs</h3>
+    <!-- ADVANCED PANEL -->
+    <div id="advancedPanel" hidden>
+      <h3>Advanced modifiers</h3>
 
-        <div class="grid-3">
-          <div class="form-row">
-            <label for="techLevel">Tech Level (TL)</label>
-            <input id="techLevel" type="number" min="0" max="20" value="10" />
-          </div>
+      <div class="advanced-grid">
+        <label><input id="flagRich" type="checkbox"> Rich</label>
+        <label><input id="flagPoor" type="checkbox"> Poor</label>
+        <label><input id="flagBalkanized" type="checkbox"> Balkanized</label>
+        <label><input id="flagAmber" type="checkbox"> Amber</label>
+        <label><input id="flagHabitable" type="checkbox"> Habitable</label>
 
-          <div class="form-row">
-            <label for="starport">Starport</label>
-            <select id="starport">
-              <option value="">(not set)</option>
-              <option value="A">A</option>
-              <option value="B">B</option>
-              <option value="C">C</option>
-              <option value="D">D</option>
-              <option value="E">E</option>
-              <option value="X">X</option>
-            </select>
-          </div>
+        <label>
+          Zone
+          <select id="zone">
+            <option value="">—</option>
+            <option value="Outer">Outer</option>
+            <option value="Inner">Inner</option>
+          </select>
+        </label>
 
-          <div class="form-row">
-            <label for="zone">Zone</label>
-            <select id="zone">
-              <option value="">(not set)</option>
-              <option value="Inner">Inner</option>
-              <option value="Outer">Outer</option>
-            </select>
-          </div>
-        </div>
+        <label>
+          Tech Level
+          <input id="techLevel" type="number" min="0" max="15" value="8">
+        </label>
 
-        <div class="pillbox">
-          <label class="check"><input id="flagRich" type="checkbox" /> <span>Rich</span></label>
-          <label class="check"><input id="flagPoor" type="checkbox" /> <span>Poor</span></label>
-          <label class="check"><input id="flagBalkanized" type="checkbox" /> <span>Balkanized</span></label>
-          <label class="check"><input id="flagAmber" type="checkbox" /> <span>Amber</span></label>
-          <label class="check"><input id="flagHabitable" type="checkbox" /> <span>Habitable</span></label>
-        </div>
-
-        <div class="hint">
-          Advanced mode applies the <span class="mono">columnDM</span> rules from <span class="mono">trade-columns.json</span> to the column roll,
-          and applies buy/sell DMs and simple legality checks (LG vs Law Level) on each generated item.
-        </div>
+        <label>
+          Starport
+          <select id="starport">
+            <option value="">—</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="E">E</option>
+            <option value="X">X</option>
+          </select>
+        </label>
       </div>
-    </section>
+    </div>
 
-    <section class="card">
-      <div class="card-h">
-        <h2>Results</h2>
-        <div class="muted" id="dataStatus">Loading tables…</div>
-      </div>
+  </section>
 
-      <div id="results" class="results"></div>
-    </section>
+  <!-- RESULTS CARD -->
+  <section class="card">
+    <div class="card-header">
+      <h2>Results</h2>
+      <div id="dataStatus" class="muted">Loading tables…</div>
+    </div>
 
-    <footer class="site-footer">
-      <div class="muted">
-        
-      </div>
-    </footer>
-  </main>
+    <div id="results">
+      <div class="muted">No results yet.</div>
+    </div>
+  </section>
 
-  <script src="./app.js"></script>
+</main>
+
+<!-- MODAL -->
+<div id="modalOverlay" class="modal-overlay" hidden>
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle">Modal</h3>
+      <button id="modalClose" class="btn-ghost" type="button">Close</button>
+    </div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script src="./app.js"></script>
+
 </body>
 </html>
