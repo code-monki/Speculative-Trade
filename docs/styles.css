@@ -400,6 +400,15 @@ input[type="checkbox"] { accent-color: var(--accent); }
 
 .modal-header h3 { margin: 0; }
 
+.modal a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.modal a:hover {
+  text-decoration: none;
+}
+
 .notice-pre {
   white-space: pre-wrap;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -432,4 +441,10 @@ input[type="checkbox"] { accent-color: var(--accent); }
   .card { padding: 18px; }
   .advanced-grid { grid-template-columns: 1fr; }
   label { font-size: 12px; }
+}
+
+.modal .version {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 0.25rem;
 }

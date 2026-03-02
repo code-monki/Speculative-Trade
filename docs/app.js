@@ -417,10 +417,30 @@ async function openNoticeModal() {
   openModal("Legal / NOTICE", `<pre class="notice-pre">${escaped}</pre>`);
 }
 
+const APP_VERSION = "1.0.0";
+
 function openAboutModal() {
   openModal("About", `
-    <p><b>Speculative Trade Generator</b> is a no-build, single-page web app that rolls speculative trade lots from JSON-transcribed tables.</p>
-    <p class="muted">Attribution and licensing are documented in the repository <code>README.md</code> and <code>NOTICE</code>.</p>
+    <p><strong>Speculative Trade Generator</strong></p>
+
+    <p>
+      A static, GitHub Pages–hosted web application for generating speculative
+      trade lots using JSON-transcribed tables and a Traveller-style world profile line.
+    </p>
+
+    <p class="version">Version ${APP_VERSION}</p>
+
+    <p>
+      Source code:
+      <br>
+      <a href="https://github.com/<user>/<repo>" target="_blank" rel="noopener noreferrer">
+        https://github.com/<user>/<repo>
+      </a>
+    </p>
+
+    <p class="muted">
+      Code licensed under MIT. Data licensed under CC BY-SA 4.0.
+    </p>
   `);
 }
 
