@@ -1,0 +1,1383 @@
+{
+  "_license": {
+    "dataLicense": "CC BY-SA 4.0",
+    "dataLicenseURL": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "codeLicense": "MIT",
+    "codeLicenseURL": "https://opensource.org/licenses/MIT",
+    "originalSource": "u/InterceptSpaceCombat - Reddit Traveller",
+    "originalURL": "https://www.reddit.com/r/traveller/comments/1rimleq/speculative_trade_table/",
+    "notes": "This JSON is a structured transcription/derivative representation of the referenced table."
+  },
+  "description": "Speculative trade merchandise table entries (OCR-transcribed + cleaned).",
+  "unitNotes": {
+    "crPerDTon": "Credits per displacement ton (dTon) as shown in the source table.",
+    "allotmentDTon": "Typical available quantity (dTon) as shown in the source table.",
+    "density": "Density factor column from the table."
+  },
+  "items": [
+    {
+      "category": "Ice",
+      "roll": {
+        "min": 1,
+        "max": 3
+      },
+      "name": "Water ice",
+      "density": 1,
+      "crPerDTon": 10,
+      "allotmentDTon": 20000,
+      "buySellDM": {
+        "Ag": -3,
+        "Water": -3,
+        "Vacc": 2,
+        "Desert": 2
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": "Frozen",
+      "notes": null
+    },
+    {
+      "category": "Ice",
+      "roll": {
+        "min": 4,
+        "max": 5
+      },
+      "name": "Nitrogen",
+      "density": 1,
+      "crPerDTon": 1000,
+      "allotmentDTon": 200,
+      "buySellDM": {
+        "Vacc": -2,
+        "Ind": 2,
+        "Ag": 3
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": "Cryogenic",
+      "notes": null
+    },
+    {
+      "category": "Ice",
+      "roll": {
+        "min": 6,
+        "max": 6
+      },
+      "name": "Tritium",
+      "density": 1,
+      "crPerDTon": 10000,
+      "allotmentDTon": 20,
+      "buySellDM": {
+        "Vacc": -1,
+        "Ind": 3
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": "Cryogenic/Radioactive",
+      "notes": null
+    },
+    {
+      "category": "Lt metal",
+      "roll": {
+        "min": 1,
+        "max": 3
+      },
+      "name": "Aluminium",
+      "density": 2,
+      "crPerDTon": 100,
+      "allotmentDTon": 2000,
+      "buySellDM": {
+        "nInd": -2,
+        "Ind": 2
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": null,
+      "notes": null
+    },
+    {
+      "category": "Lt metal",
+      "roll": {
+        "min": 4,
+        "max": 5
+      },
+      "name": "Titanium",
+      "density": 2,
+      "crPerDTon": 200,
+      "allotmentDTon": 1000,
+      "buySellDM": {
+        "nInd": -2,
+        "Ind": 2
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": null,
+      "notes": null
+    },
+    {
+      "category": "Lt metal",
+      "roll": {
+        "min": 6,
+        "max": 6
+      },
+      "name": "Lanthanum",
+      "density": 2,
+      "crPerDTon": 50000,
+      "allotmentDTon": 4,
+      "buySellDM": {
+        "nInd": -2,
+        "Ind": 3
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": "Theft",
+      "notes": null
+    },
+    {
+      "category": "Metal",
+      "roll": {
+        "min": 1,
+        "max": 3
+      },
+      "name": "Nickel",
+      "density": 5,
+      "crPerDTon": 100,
+      "allotmentDTon": 2000,
+      "buySellDM": {
+        "nInd": -2,
+        "Vacc": -2,
+        "Ind": 2
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": null,
+      "notes": null
+    },
+    {
+      "category": "Metal",
+      "roll": {
+        "min": 4,
+        "max": 5
+      },
+      "name": "Iron",
+      "density": 5,
+      "crPerDTon": 200,
+      "allotmentDTon": 1000,
+      "buySellDM": {
+        "nInd": -2,
+        "Vacc": -2,
+        "Ind": 2
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": null,
+      "notes": null
+    },
+    {
+      "category": "Metal",
+      "roll": {
+        "min": 6,
+        "max": 6
+      },
+      "name": "Copper",
+      "density": 5,
+      "crPerDTon": 5000,
+      "allotmentDTon": 40,
+      "buySellDM": {
+        "nInd": -2,
+        "Vacc": -2,
+        "Ind": 2
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": null,
+      "notes": null
+    },
+    {
+      "category": "Hvy metal",
+      "roll": {
+        "min": 1,
+        "max": 3
+      },
+      "name": "Lead",
+      "density": 10,
+      "crPerDTon": 100,
+      "allotmentDTon": 2000,
+      "buySellDM": {
+        "nInd": -2,
+        "Vacc": 1,
+        "Ind": 2
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": null,
+      "notes": "Shielding"
+    },
+    {
+      "category": "Hvy metal",
+      "roll": {
+        "min": 4,
+        "max": 5
+      },
+      "name": "Radioactives",
+      "density": 10,
+      "crPerDTon": 1000,
+      "allotmentDTon": 200,
+      "buySellDM": {
+        "nInd": -2,
+        "Vacc": -2,
+        "Ind": 2
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": "Radioactive",
+      "notes": null
+    },
+    {
+      "category": "Hvy metal",
+      "roll": {
+        "min": 6,
+        "max": 6
+      },
+      "name": "Osmium",
+      "density": 10,
+      "crPerDTon": 5000,
+      "allotmentDTon": 40,
+      "buySellDM": {
+        "nInd": -2,
+        "Vacc": -2,
+        "Ind": 2
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": null,
+      "notes": null
+    },
+    {
+      "category": "Fine metal",
+      "roll": {
+        "min": 1,
+        "max": 3
+      },
+      "name": "Tin",
+      "density": 5,
+      "crPerDTon": 100,
+      "allotmentDTon": 2000,
+      "buySellDM": {
+        "nInd": -2,
+        "Vacc": -2,
+        "Ind": 2
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": null,
+      "notes": null
+    },
+    {
+      "category": "Fine metal",
+      "roll": {
+        "min": 4,
+        "max": 5
+      },
+      "name": "Silver",
+      "density": 5,
+      "crPerDTon": 1000,
+      "allotmentDTon": 200,
+      "buySellDM": {
+        "nInd": -2,
+        "Vacc": -2,
+        "Ind": 2,
+        "Rich": 1
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": "Theft",
+      "notes": "Jewelry"
+    },
+    {
+      "category": "Fine metal",
+      "roll": {
+        "min": 6,
+        "max": 6
+      },
+      "name": "Gold",
+      "density": 10,
+      "crPerDTon": 20000,
+      "allotmentDTon": 10,
+      "buySellDM": {
+        "nInd": -2,
+        "Vacc": -2,
+        "Ind": 2,
+        "Rich": 2
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": "Theft",
+      "notes": "Jewel"
+    },
+    {
+      "category": "Organics",
+      "roll": {
+        "min": 1,
+        "max": 3
+      },
+      "name": "Petrochemicals",
+      "density": 1,
+      "crPerDTon": 10,
+      "allotmentDTon": 20000,
+      "buySellDM": {
+        "Ag": -3,
+        "Ind": 1,
+        "Vacc": 2,
+        "Desert": 1
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": "Flammable",
+      "notes": "TL 4+"
+    },
+    {
+      "category": "Organics",
+      "roll": {
+        "min": 4,
+        "max": 5
+      },
+      "name": "Phosphorus\"",
+      "density": 1,
+      "crPerDTon": 100,
+      "allotmentDTon": 2000,
+      "buySellDM": {
+        "nInd": -2,
+        "Ind": 2,
+        "Ag": 3,
+        "Vacc": 2,
+        "Desert": 1
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": "Explosive",
+      "notes": "TL 5+"
+    },
+    {
+      "category": "Organics",
+      "roll": {
+        "min": 6,
+        "max": 6
+      },
+      "name": "Rare chemicals",
+      "density": 1,
+      "crPerDTon": 10000,
+      "allotmentDTon": 20,
+      "buySellDM": {
+        "Ag": -2,
+        "Ind": 1,
+        "Vacc": 1
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": "Sensitive",
+      "notes": "TL6+"
+    },
+    {
+      "category": "Animals",
+      "roll": {
+        "min": 1,
+        "max": 3
+      },
+      "name": "Food animals",
+      "density": 1,
+      "crPerDTon": 1000,
+      "allotmentDTon": 200,
+      "buySellDM": {
+        "Ag": -3,
+        "nAg": 3,
+        "Vacc": 2
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": "Care",
+      "notes": "-"
+    },
+    {
+      "category": "Animals",
+      "roll": {
+        "min": 4,
+        "max": 5
+      },
+      "name": "Beast of burden",
+      "density": 1,
+      "crPerDTon": 2000,
+      "allotmentDTon": 100,
+      "buySellDM": {
+        "Ag": -3,
+        "nInd": 1,
+        "Poor": 2,
+        "Vacc": -3,
+        "Water": -3
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": "Care",
+      "notes": null
+    },
+    {
+      "category": "Animals",
+      "roll": {
+        "min": 6,
+        "max": 6
+      },
+      "name": "Pets",
+      "density": 1,
+      "crPerDTon": 10000,
+      "allotmentDTon": 20,
+      "buySellDM": {
+        "Ag": -3,
+        "Rich": 3,
+        "Vacc": 1
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": "Care",
+      "notes": null
+    },
+    {
+      "category": "Seafood",
+      "roll": {
+        "min": 1,
+        "max": 3
+      },
+      "name": "Algae",
+      "density": 1,
+      "crPerDTon": 10,
+      "allotmentDTon": 20000,
+      "buySellDM": {
+        "Ag": -2,
+        "Water": -2,
+        "nAg": 2
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": null,
+      "notes": null
+    },
+    {
+      "category": "Seafood",
+      "roll": {
+        "min": 4,
+        "max": 5
+      },
+      "name": "Fish",
+      "density": 1,
+      "crPerDTon": 500,
+      "allotmentDTon": 400,
+      "buySellDM": {
+        "Ag": -2,
+        "Water": -2,
+        "nAg": 2,
+        "Rich": 1
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": "Frozen",
+      "notes": null
+    },
+    {
+      "category": "Seafood",
+      "roll": {
+        "min": 6,
+        "max": 6
+      },
+      "name": "Live fish",
+      "density": 1,
+      "crPerDTon": 5000,
+      "allotmentDTon": 40,
+      "buySellDM": {
+        "Ag": -3,
+        "Water": -2,
+        "nAg": 2,
+        "Rich": 2
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": "Care",
+      "notes": null
+    },
+    {
+      "category": "Vegetables",
+      "roll": {
+        "min": 1,
+        "max": 3
+      },
+      "name": "Grain",
+      "density": 1,
+      "crPerDTon": 20,
+      "allotmentDTon": 10000,
+      "buySellDM": {
+        "Ag": -3,
+        "nAg": 3,
+        "Vacc": 1
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": null,
+      "notes": null
+    },
+    {
+      "category": "Vegetables",
+      "roll": {
+        "min": 4,
+        "max": 5
+      },
+      "name": "Fruit",
+      "density": 1,
+      "crPerDTon": 100,
+      "allotmentDTon": 2000,
+      "buySellDM": {
+        "Ag": -3,
+        "nAg": 3,
+        "Vacc": 2,
+        "Rich": 1
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": "Sensitive",
+      "notes": null
+    },
+    {
+      "category": "Vegetables",
+      "roll": {
+        "min": 6,
+        "max": 6
+      },
+      "name": "Spices",
+      "density": 1,
+      "crPerDTon": 20000,
+      "allotmentDTon": 100,
+      "buySellDM": {
+        "Ag": -3,
+        "nAg": 3,
+        "Vacc": 2,
+        "Rich": 2
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": null,
+      "notes": null
+    },
+    {
+      "category": "Meatfood",
+      "roll": {
+        "min": 1,
+        "max": 3
+      },
+      "name": "Meat",
+      "density": 1,
+      "crPerDTon": 500,
+      "allotmentDTon": 400,
+      "buySellDM": {
+        "Ag": -3,
+        "nAg": 3,
+        "Vacc": 2
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": "Frozen",
+      "notes": null
+    },
+    {
+      "category": "Meatfood",
+      "roll": {
+        "min": 4,
+        "max": 5
+      },
+      "name": "Game meat",
+      "density": 1,
+      "crPerDTon": 2000,
+      "allotmentDTon": 100,
+      "buySellDM": {
+        "Ag": -3,
+        "nAg": 3,
+        "Vacc": 2,
+        "Rich": 1
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": null,
+      "notes": "==+Frozen"
+    },
+    {
+      "category": "Meatfood",
+      "roll": {
+        "min": 6,
+        "max": 6
+      },
+      "name": "Exotic meat",
+      "density": 1,
+      "crPerDTon": 10000,
+      "allotmentDTon": 20,
+      "buySellDM": {
+        "Ag": -3,
+        "nAg": 3,
+        "Vacc": 2,
+        "Rich": 2
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": "Care",
+      "notes": null
+    },
+    {
+      "category": "Alcohol",
+      "roll": {
+        "min": 1,
+        "max": 3
+      },
+      "name": "Beer",
+      "density": 1,
+      "crPerDTon": 1000,
+      "allotmentDTon": 200,
+      "buySellDM": {
+        "Ag": -3,
+        "nAg": 1,
+        "Vacc": 2,
+        "Rich": 1,
+        "Desert": 2
+      },
+      "multipliers": null,
+      "legalityLG": "8",
+      "handling": null,
+      "notes": null
+    },
+    {
+      "category": "Alcohol",
+      "roll": {
+        "min": 4,
+        "max": 5
+      },
+      "name": "Wine",
+      "density": 1,
+      "crPerDTon": 2000,
+      "allotmentDTon": 100,
+      "buySellDM": {
+        "Ag": -3,
+        "nAg": 1,
+        "Vacc": 2,
+        "Rich": 2
+      },
+      "multipliers": null,
+      "legalityLG": "8",
+      "handling": "Sensitive",
+      "notes": null
+    },
+    {
+      "category": "Alcohol",
+      "roll": {
+        "min": 6,
+        "max": 6
+      },
+      "name": "Spirits",
+      "density": 1,
+      "crPerDTon": 10000,
+      "allotmentDTon": 20,
+      "buySellDM": {
+        "Ag": -3,
+        "nAg": 1,
+        "Vacc": 1,
+        "Rich": 3
+      },
+      "multipliers": null,
+      "legalityLG": "7",
+      "handling": "Flammable",
+      "notes": null
+    },
+    {
+      "category": "Stimulants",
+      "roll": {
+        "min": 1,
+        "max": 3
+      },
+      "name": "Tea or Coffee",
+      "density": 1,
+      "crPerDTon": 1000,
+      "allotmentDTon": 200,
+      "buySellDM": {
+        "Ag": -3,
+        "nAg": 1,
+        "Vacc": 2,
+        "Rich": 1,
+        "Desert": 1
+      },
+      "multipliers": null,
+      "legalityLG": "9",
+      "handling": null,
+      "notes": null
+    },
+    {
+      "category": "Stimulants",
+      "roll": {
+        "min": 4,
+        "max": 5
+      },
+      "name": "Tobacco",
+      "density": 1,
+      "crPerDTon": 5000,
+      "allotmentDTon": 40,
+      "buySellDM": {
+        "Ag": -3,
+        "nAg": 1,
+        "Vacc": 1,
+        "Rich": 3
+      },
+      "multipliers": null,
+      "legalityLG": "8",
+      "handling": "Flammable",
+      "notes": null
+    },
+    {
+      "category": "Stimulants",
+      "roll": {
+        "min": 6,
+        "max": 6
+      },
+      "name": "Drugs",
+      "density": 1,
+      "crPerDTon": 20000,
+      "allotmentDTon": 10,
+      "buySellDM": {
+        "Ag": -3,
+        "nAg": 1,
+        "Vacc": 1,
+        "Rich": 3
+      },
+      "multipliers": null,
+      "legalityLG": "3-4",
+      "handling": "Sensitive",
+      "notes": null
+    },
+    {
+      "category": "Textiles",
+      "roll": {
+        "min": 1,
+        "max": 3
+      },
+      "name": "Textiles",
+      "density": 1,
+      "crPerDTon": 1000,
+      "allotmentDTon": 200,
+      "buySellDM": {
+        "Ag": -3,
+        "Rich": 1
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": null,
+      "notes": null
+    },
+    {
+      "category": "Textiles",
+      "roll": {
+        "min": 4,
+        "max": 5
+      },
+      "name": "Clothing",
+      "density": 1,
+      "crPerDTon": 2000,
+      "allotmentDTon": 100,
+      "buySellDM": {
+        "Ag": -3,
+        "Ind": -1,
+        "Rich": 2
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": "Sensitive",
+      "notes": null
+    },
+    {
+      "category": "Textiles",
+      "roll": {
+        "min": 6,
+        "max": 6
+      },
+      "name": "Luxuary clothing",
+      "density": 1,
+      "crPerDTon": 10000,
+      "allotmentDTon": 20,
+      "buySellDM": {
+        "Ag": -3,
+        "Rich": 3
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": "Fad",
+      "notes": null
+    },
+    {
+      "category": "Parts",
+      "roll": {
+        "min": 1,
+        "max": 3
+      },
+      "name": "Mechanical parts",
+      "density": 1,
+      "crPerDTon": 10000,
+      "allotmentDTon": 20,
+      "buySellDM": {
+        "Ind": -1,
+        "nInd": 1
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": null,
+      "notes": "TL 5+"
+    },
+    {
+      "category": "Parts",
+      "roll": {
+        "min": 4,
+        "max": 5
+      },
+      "name": "Electronic parts",
+      "density": 1,
+      "crPerDTon": 100000,
+      "allotmentDTon": 2,
+      "buySellDM": {
+        "Ind": -2,
+        "nInd": 2
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": "Sensitive",
+      "notes": "TL/7+"
+    },
+    {
+      "category": "Parts",
+      "roll": {
+        "min": 6,
+        "max": 6
+      },
+      "name": "Engineering parts",
+      "density": 2,
+      "crPerDTon": 100000,
+      "allotmentDTon": 2,
+      "buySellDM": {
+        "Ind": -3,
+        "nInd": 3
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": "Sensitive",
+      "notes": "TL9+"
+    },
+    {
+      "category": "Electronics",
+      "roll": {
+        "min": 1,
+        "max": 3
+      },
+      "name": "Software/games",
+      "density": 1,
+      "crPerDTon": 10000,
+      "allotmentDTon": 20,
+      "buySellDM": {
+        "Ind": -1,
+        "nInd": 2,
+        "Rich": 1
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": "Fad",
+      "notes": "TL 8+"
+    },
+    {
+      "category": "Electronics",
+      "roll": {
+        "min": 4,
+        "max": 5
+      },
+      "name": "Computers",
+      "density": 1,
+      "crPerDTon": 100000,
+      "allotmentDTon": 2,
+      "buySellDM": {
+        "Ind": -1,
+        "nInd": 1
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": null,
+      "notes": "Tt"
+    },
+    {
+      "category": "Electronics",
+      "roll": {
+        "min": 6,
+        "max": 6
+      },
+      "name": "Robots",
+      "density": 1,
+      "crPerDTon": 100000,
+      "allotmentDTon": 2,
+      "buySellDM": {
+        "Ind": -1,
+        "nInd": 1,
+        "Rich": 1
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": null,
+      "notes": "TL 12+"
+    },
+    {
+      "category": "Weapons",
+      "roll": {
+        "min": 1,
+        "max": 3
+      },
+      "name": "Firearms",
+      "density": 1,
+      "crPerDTon": 5000,
+      "allotmentDTon": 40,
+      "buySellDM": {
+        "Ind": -2,
+        "nInd": 1
+      },
+      "multipliers": {
+        "Amber": 2,
+        "Balkanized": 2
+      },
+      "legalityLG": "4",
+      "handling": null,
+      "notes": "TL 5+"
+    },
+    {
+      "category": "Weapons",
+      "roll": {
+        "min": 4,
+        "max": 5
+      },
+      "name": "Explosives",
+      "density": 1,
+      "crPerDTon": 10000,
+      "allotmentDTon": 20,
+      "buySellDM": {
+        "Ind": -2,
+        "nInd": 2
+      },
+      "multipliers": {
+        "Amber": 2,
+        "Balkanized": 2
+      },
+      "legalityLG": "1",
+      "handling": "Explosive",
+      "notes": "TL6+"
+    },
+    {
+      "category": "Weapons",
+      "roll": {
+        "min": 6,
+        "max": 6
+      },
+      "name": "Luxuary blades",
+      "density": 1,
+      "crPerDTon": 20000,
+      "allotmentDTon": 10,
+      "buySellDM": {
+        "Ind": -1,
+        "nInd": 1,
+        "Rich": 3
+      },
+      "multipliers": null,
+      "legalityLG": "7",
+      "handling": "Fad",
+      "notes": "TL 3+"
+    },
+    {
+      "category": "Military",
+      "roll": {
+        "min": 1,
+        "max": 3
+      },
+      "name": "Heavy ammo",
+      "density": 1,
+      "crPerDTon": 10000,
+      "allotmentDTon": 20,
+      "buySellDM": {
+        "Ind": -2,
+        "nInd": 1
+      },
+      "multipliers": {
+        "Amber": 2,
+        "Balkanized": 2
+      },
+      "legalityLG": "4",
+      "handling": "Explosive",
+      "notes": "TL 5+"
+    },
+    {
+      "category": "Military",
+      "roll": {
+        "min": 4,
+        "max": 5
+      },
+      "name": "Heavy weapons",
+      "density": 1,
+      "crPerDTon": 20000,
+      "allotmentDTon": 10,
+      "buySellDM": {
+        "Ind": -2,
+        "nInd": 1
+      },
+      "multipliers": {
+        "Amber": 2,
+        "Balkanized": 2
+      },
+      "legalityLG": "4",
+      "handling": null,
+      "notes": "TL 5+"
+    },
+    {
+      "category": "Military",
+      "roll": {
+        "min": 6,
+        "max": 6
+      },
+      "name": "Military vehicles",
+      "density": 1,
+      "crPerDTon": 50000,
+      "allotmentDTon": 4,
+      "buySellDM": {
+        "Ind": -2,
+        "nInd": 1
+      },
+      "multipliers": {
+        "Amber": 2,
+        "Balkanized": 2
+      },
+      "legalityLG": "4",
+      "handling": null,
+      "notes": "TL 6+"
+    },
+    {
+      "category": "Vehicles",
+      "roll": {
+        "min": 1,
+        "max": 3
+      },
+      "name": "Ground vehicles",
+      "density": 5,
+      "crPerDTon": 10000,
+      "allotmentDTon": 20,
+      "buySellDM": {
+        "Ind": -2,
+        "nInd": 1,
+        "Water": -3
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": null,
+      "notes": "TL 5+"
+    },
+    {
+      "category": "Vehicles",
+      "roll": {
+        "min": 4,
+        "max": 5
+      },
+      "name": "Grav vehicles",
+      "density": 5,
+      "crPerDTon": 20000,
+      "allotmentDTon": 10,
+      "buySellDM": {
+        "Ind": -2,
+        "nInd": 2,
+        "Rich": 1
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": null,
+      "notes": "TL 10+"
+    },
+    {
+      "category": "Vehicles",
+      "roll": {
+        "min": 6,
+        "max": 6
+      },
+      "name": "Farm vehicles",
+      "density": 5,
+      "crPerDTon": 10000,
+      "allotmentDTon": 20,
+      "buySellDM": {
+        "Ind": -3,
+        "nAg": -1,
+        "Vacc": -3,
+        "nInd": 1,
+        "Ag": 3
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": null,
+      "notes": "TL 5+"
+    },
+    {
+      "category": "Hvy industry",
+      "roll": {
+        "min": 1,
+        "max": 3
+      },
+      "name": "Grav thruster",
+      "density": 2,
+      "crPerDTon": 100000,
+      "allotmentDTon": 4,
+      "buySellDM": {
+        "Ind": -2,
+        "nInd": 1
+      },
+      "multipliers": null,
+      "legalityLG": null,
+      "handling": null,
+      "notes": "TL 10+"
+    },
+    {
+      "category": "Hvy industry",
+      "roll": {
+        "min": 4,
+        "max": 5
+      },
+      "name": "Powerplant",
+      "density": 2,
+      "crPerDTon": 200000,
+      "allotmentDTon": 10,
+      "buySellDM": {
+        "Ind": -2,
+        "nInd": 2
+      },
+      "multipliers": {
+        "B-starport": 2
+      },
+      "legalityLG": null,
+      "handling": null,
+      "notes": "TL 9+"
+    },
+    {
+      "category": "Hvy industry",
+      "roll": {
+        "min": 6,
+        "max": 6
+      },
+      "name": "Jumpdrive",
+      "density": 2,
+      "crPerDTon": 200000,
+      "allotmentDTon": 10,
+      "buySellDM": {
+        "Ind": -2,
+        "nInd": 3
+      },
+      "multipliers": {
+        "A-starport": 2
+      },
+      "legalityLG": null,
+      "handling": null,
+      "notes": "TL 9+"
+    },
+    {
+      "category": "Water",
+      "roll": {
+        "min": 1,
+        "max": 3
+      },
+      "name": "Water vehicles",
+      "density": 5,
+      "crPerDTon": 2000,
+      "allotmentDTon": 100,
+      "buySellDM": {
+        "Ind": -2,
+        "nInd": 1,
+        "Desert": -5
+      },
+      "multipliers": {
+        "Water": 2
+      },
+      "legalityLG": null,
+      "handling": null,
+      "notes": "TL 1+"
+    },
+    {
+      "category": "Water",
+      "roll": {
+        "min": 4,
+        "max": 5
+      },
+      "name": "Diving suits",
+      "density": 5,
+      "crPerDTon": 10000,
+      "allotmentDTon": 20,
+      "buySellDM": {
+        "Ind": -2,
+        "nInd": 2,
+        "Desert": -5
+      },
+      "multipliers": {
+        "Water": 2
+      },
+      "legalityLG": null,
+      "handling": null,
+      "notes": "TL 6+"
+    },
+    {
+      "category": "Water",
+      "roll": {
+        "min": 6,
+        "max": 6
+      },
+      "name": "Submarines",
+      "density": 5,
+      "crPerDTon": 20000,
+      "allotmentDTon": 10,
+      "buySellDM": {
+        "Ind": -2,
+        "nInd": 3,
+        "Desert": -5
+      },
+      "multipliers": {
+        "Water": 2
+      },
+      "legalityLG": null,
+      "handling": null,
+      "notes": "TL 6+"
+    },
+    {
+      "category": "Desert",
+      "roll": {
+        "min": 1,
+        "max": 3
+      },
+      "name": "Moisture collectors",
+      "density": 1,
+      "crPerDTon": 2000,
+      "allotmentDTon": 100,
+      "buySellDM": {
+        "Ind": -2,
+        "nInd": 1,
+        "Water": -5
+      },
+      "multipliers": {
+        "Desert": 2
+      },
+      "legalityLG": null,
+      "handling": "Sensitive",
+      "notes": "TL 3+"
+    },
+    {
+      "category": "Desert",
+      "roll": {
+        "min": 4,
+        "max": 5
+      },
+      "name": "Solar panels",
+      "density": 1,
+      "crPerDTon": 10000,
+      "allotmentDTon": 20,
+      "buySellDM": {
+        "Ind": -2,
+        "nInd": 2,
+        "Water": -5
+      },
+      "multipliers": {
+        "Desert": 2
+      },
+      "legalityLG": null,
+      "handling": null,
+      "notes": "TL 7+"
+    },
+    {
+      "category": "Desert",
+      "roll": {
+        "min": 6,
+        "max": 6
+      },
+      "name": "Stillsuits",
+      "density": 1,
+      "crPerDTon": 50000,
+      "allotmentDTon": 4,
+      "buySellDM": {
+        "Ind": -2,
+        "nInd": 2,
+        "Water": -5
+      },
+      "multipliers": {
+        "Desert": 2
+      },
+      "legalityLG": null,
+      "handling": null,
+      "notes": "TL 9+"
+    },
+    {
+      "category": "Vacc",
+      "roll": {
+        "min": 1,
+        "max": 3
+      },
+      "name": "Vaccfoam",
+      "density": 1,
+      "crPerDTon": 10000,
+      "allotmentDTon": 20,
+      "buySellDM": {
+        "Ind": -2,
+        "nInd": 1
+      },
+      "multipliers": {
+        "Vacc": 2
+      },
+      "legalityLG": null,
+      "handling": "Sensitive",
+      "notes": "TL 8+"
+    },
+    {
+      "category": "Vacc",
+      "roll": {
+        "min": 4,
+        "max": 5
+      },
+      "name": "Rescue balls",
+      "density": 1,
+      "crPerDTon": 50000,
+      "allotmentDTon": 4,
+      "buySellDM": {
+        "Ind": -2,
+        "nInd": 2
+      },
+      "multipliers": {
+        "Vacc": 2
+      },
+      "legalityLG": null,
+      "handling": null,
+      "notes": "Tee"
+    },
+    {
+      "category": "Vacc",
+      "roll": {
+        "min": 6,
+        "max": 6
+      },
+      "name": "Vaccsuits",
+      "density": 1,
+      "crPerDTon": 100000,
+      "allotmentDTon": 2,
+      "buySellDM": {
+        "Ind": -2,
+        "nInd": 3
+      },
+      "multipliers": {
+        "Vacc": 2
+      },
+      "legalityLG": null,
+      "handling": null,
+      "notes": "TL 6+"
+    }
+  ],
+  "_spdx": {
+    "code": "MIT",
+    "data": "CC-BY-SA-4.0"
+  }
+}
