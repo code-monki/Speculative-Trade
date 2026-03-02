@@ -5,202 +5,199 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Speculative Trade Generator</title>
-  <meta name="description" content="Loads trade tables from JSON and generates lots via 1D6 column + 1D6 row.">
+  <meta name="description" content="Speculative trade lot generator (no build step). Loads tables from JSON and rolls 1D6 column + 1D6 row.">
   <link rel="stylesheet" href="./styles.css">
 </head>
 
 <body>
-
-<header class="topbar">
-  <div class="container header-inner">
-    <div class="brand">
-      <h1>Speculative Trade Generator</h1>
-      <p class="subtitle">Enter a world profile (UWP + codes/tags) and generate lots via 1D6 column + 1D6 row.</p>
-    </div>
-
-    <nav class="header-actions" aria-label="Primary">
-      <button id="btnAbout" class="btn-ghost" type="button">About</button>
-      <button id="btnHelp" class="btn-ghost" type="button">Help</button>
-      <button id="btnLegal" class="btn-ghost" type="button">Legal</button>
-      <button id="themeToggle" class="btn-ghost" type="button">Theme</button>
-    </nav>
-  </div>
-</header>
-
-<main class="page container">
-
-  <!-- WORLD PROFILE -->
-  <section class="card">
-    <div class="card-header">
-      <h2>World profile</h2>
-      <div id="dataStatus" class="muted">Loading tables…</div>
-    </div>
-
-    <label>
-      UWP + trade codes / tags
-      <input id="worldProfile" type="text" spellcheck="false" autocomplete="off"
-             placeholder="Example: A867A74-C Ag Ri In Inner Amber">
-    </label>
-
-    <p class="muted">
-      Format: <b>UWP</b> first (e.g. <code>A867A74-C</code>) followed by codes/tags.
-      Abbreviations accepted (e.g. <code>In</code>→Ind, <code>Ni</code>→nInd,
-      <code>De</code>→Desert, <code>Wa</code>→Water, <code>Va</code>→Vacc,
-      <code>Ri</code>→Rich, <code>Po</code>→Poor).
-    </p>
-
-    <div class="kv">
-      <div class="k">Derived</div>
-      <div class="v">
-        Starport <span id="derivedStarport">—</span> •
-        TL <span id="derivedTL">—</span> •
-        Law <span id="derivedLaw">—</span>
+  <header class="topbar">
+    <div class="container header-inner">
+      <div class="brand">
+        <h1>Speculative Trade Generator</h1>
+        <p class="subtitle">Enter a world profile (UWP + codes/tags) and generate lots via 1D6 column + 1D6 row.</p>
       </div>
 
-      <div class="k">World trade classes</div>
-      <div class="v"><span id="derivedTradeCodes">—</span></div>
-
-      <div class="k">Tags / conditions</div>
-      <div class="v"><span id="derivedTags">—</span></div>
+      <nav class="header-actions" aria-label="Primary">
+        <button id="btnAbout" class="btn-ghost" type="button">About</button>
+        <button id="btnHelp" class="btn-ghost" type="button">Help</button>
+        <button id="btnLegal" class="btn-ghost" type="button">Legal</button>
+        <button id="themeToggle" class="btn-ghost" type="button">Theme</button>
+      </nav>
     </div>
+  </header>
 
-    <details class="details">
-      <summary>World context (optional)</summary>
-      <div class="details-body">
-        <p class="muted">
-          Optional contextual flags. Currently only <b>Balkanisation (Gov 7)</b> maps to the <code>Balkanized</code> condition used by the tables.
-        </p>
+  <main class="page container">
+    <!-- WORLD PROFILE -->
+    <section class="card">
+      <div class="card-header">
+        <h2>World profile</h2>
+        <div id="dataStatus" class="muted">Loading tables…</div>
+      </div>
 
-        <div class="advanced-grid">
+      <label>
+        UWP + trade codes / tags
+        <input id="worldProfile" type="text" spellcheck="false" autocomplete="off"
+               placeholder="Example: A867A74-C Ag Ri In Inner Amber">
+      </label>
+
+      <p class="muted">
+        Format: <b>UWP</b> first (e.g. <code>A867A74-C</code>) followed by any codes/tags.
+        Abbreviations accepted (e.g. <code>In</code>→Ind, <code>Ni</code>→nInd, <code>De</code>→Desert,
+        <code>Wa</code>→Water, <code>Va</code>→Vacc, <code>Ri</code>→Rich, <code>Po</code>→Poor).
+      </p>
+
+      <div class="kv">
+        <div class="k">Derived</div>
+        <div class="v">
+          Starport <span id="derivedStarport">—</span> •
+          TL <span id="derivedTL">—</span> •
+          Law <span id="derivedLaw">—</span>
+        </div>
+
+        <div class="k">World trade classes</div>
+        <div class="v"><span id="derivedTradeCodes">—</span></div>
+
+        <div class="k">Tags / conditions</div>
+        <div class="v"><span id="derivedTags">—</span></div>
+      </div>
+
+      <details class="details">
+        <summary>World context (optional)</summary>
+        <div class="details-body">
+          <p class="muted">
+            Optional contextual flags. Currently only <b>Balkanisation (Gov 7)</b> maps to the
+            <code>Balkanized</code> condition used by the tables.
+          </p>
+
+          <div class="advanced-grid">
+            <label>
+              Zone
+              <select id="zone">
+                <option value="">—</option>
+                <option value="Outer">Outer</option>
+                <option value="Inner">Inner</option>
+              </select>
+            </label>
+
+            <label>
+              Habitability
+              <select id="habitability">
+                <option value="">—</option>
+                <option value="Habitable">Habitable</option>
+                <option value="Inhabitable">Inhabitable</option>
+              </select>
+            </label>
+
+            <label>
+              Travel zone
+              <select id="travelZone">
+                <option value="">—</option>
+                <option value="Green">Green</option>
+                <option value="Amber">Amber</option>
+                <option value="Red">Red</option>
+              </select>
+            </label>
+
+            <label>
+              Government type
+              <select id="governmentType">
+                <option value="">—</option>
+                <option value="0">0 — None</option>
+                <option value="1">1 — Company/Corporation</option>
+                <option value="2">2 — Participating Democracy</option>
+                <option value="3">3 — Self-Perpetuating Oligarchy</option>
+                <option value="4">4 — Representative Democracy</option>
+                <option value="5">5 — Feudal Technocracy</option>
+                <option value="6">6 — Captive Government</option>
+                <option value="7">7 — Balkanisation</option>
+                <option value="8">8 — Civil Service Bureaucracy</option>
+                <option value="9">9 — Impersonal Bureaucracy</option>
+                <option value="A">A — Charismatic Dictator</option>
+                <option value="B">B — Non-Charismatic Dictator</option>
+                <option value="C">C — Charismatic Oligarchy</option>
+                <option value="D">D — Religious Dictatorship</option>
+              </select>
+            </label>
+
+            <label>
+              World economic status
+              <select id="economicStatus">
+                <option value="">—</option>
+                <option value="Rich">Rich</option>
+                <option value="Poor">Poor</option>
+              </select>
+            </label>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <!-- GENERATION -->
+    <section class="card">
+      <div class="card-header">
+        <h2>Generation</h2>
+      </div>
+
+      <div class="mode-grid">
+        <div>
           <label>
-            Zone
-            <select id="zone">
-              <option value="">—</option>
-              <option value="Outer">Outer</option>
-              <option value="Inner">Inner</option>
-            </select>
+            Number of lots
+            <input id="rollCount" type="number" min="1" max="50" value="6">
           </label>
 
-          <label>
-            Habitability
-            <select id="habitability">
-              <option value="">—</option>
-              <option value="Habitable">Habitable</option>
-              <option value="Inhabitable">Inhabitable</option>
-            </select>
+          <label class="inline">
+            <input id="useRandom" type="checkbox" checked>
+            Use random dice (otherwise prompts per roll)
           </label>
 
-          <label>
-            Travel zone
-            <select id="travelZone">
-              <option value="">—</option>
-              <option value="Green">Green</option>
-              <option value="Amber">Amber</option>
-              <option value="Red">Red</option>
-            </select>
-          </label>
+          <div class="action-row">
+            <button id="btnGenerate" class="btn-primary" type="button">Generate</button>
+            <button id="btnClear" class="btn-ghost" type="button">Clear</button>
+          </div>
+        </div>
 
-          <label>
-            Government type
-            <select id="governmentType">
-              <option value="">—</option>
-              <option value="0">0 — None</option>
-              <option value="1">1 — Company/Corporation</option>
-              <option value="2">2 — Participating Democracy</option>
-              <option value="3">3 — Self-Perpetuating Oligarchy</option>
-              <option value="4">4 — Representative Democracy</option>
-              <option value="5">5 — Feudal Technocracy</option>
-              <option value="6">6 — Captive Government</option>
-              <option value="7">7 — Balkanisation</option>
-              <option value="8">8 — Civil Service Bureaucracy</option>
-              <option value="9">9 — Impersonal Bureaucracy</option>
-              <option value="A">A — Charismatic Dictator</option>
-              <option value="B">B — Non-Charistmatic Dictator</option>
-              <option value="C">C — Charismatic Oligarchy</option>
-              <option value="D">D — Religious Dictatorship</option>
-            </select>
-          </label>
+        <div class="generation-notes" role="note" aria-label="Generation notes">
+          <div class="note-title">Legality</div>
+          <p class="muted">Uses the derived <b>Law</b> level from the UWP.</p>
 
-          <label>
-            World economic status
-            <select id="economicStatus">
-              <option value="">—</option>
-              <option value="Rich">Rich</option>
-              <option value="Poor">Poor</option>
-            </select>
-          </label>
+          <div class="note-title">How lots are generated</div>
+          <ul class="generation-list muted">
+            <li>Roll 1D6 for column (trade class).</li>
+            <li>If the rolled class is not present on the world, treat it as <b>None</b>.</li>
+            <li>Apply any matching per-column modifiers (DMs).</li>
+            <li>Re-select the trade class after DM adjustment.</li>
+            <li>Roll 1D6 for row within the resulting column.</li>
+            <li>Select the merchandise entry whose roll range matches.</li>
+            <li>Apply Buy/Sell DMs and evaluate legality.</li>
+          </ul>
         </div>
       </div>
-    </details>
-  </section>
+    </section>
 
-  <!-- GENERATION -->
-  <section class="card">
-    <div class="card-header">
-      <h2>Generation</h2>
-    </div>
-
-    <div class="mode-grid">
-      <div>
-        <label>
-          Number of lots
-          <input id="rollCount" type="number" min="1" max="50" value="6">
-        </label>
-
-        <label class="inline">
-          <input id="useRandom" type="checkbox" checked>
-          Use random dice (otherwise prompts per roll)
-        </label>
-
-        <div class="action-row">
-          <button id="btnGenerate" class="btn-primary" type="button">Generate</button>
-          <button id="btnClear" class="btn-ghost" type="button">Clear</button>
-        </div>
+    <!-- RESULTS -->
+    <section class="card">
+      <div class="card-header">
+        <h2>Results</h2>
+        <div id="resultsMeta" class="muted"></div>
       </div>
 
-      <div class="generation-notes" role="note" aria-label="Generation notes">
-        <div class="note-title">Legality</div>
-        <p class="muted">Uses the derived <b>Law</b> level from the UWP.</p>
-
-        <div class="note-title">How lots are generated</div>
-        <ul class="generation-list muted">
-          <li>Roll 1D6 for column (trade class).</li>
-          <li>If the rolled class is not present on the world, treat it as <b>None</b>.</li>
-          <li>Apply any matching per-column modifiers (DMs).</li>
-          <li>Re-select the trade class after DM adjustment.</li>
-          <li>Roll 1D6 for row within the resulting column.</li>
-          <li>Select the merchandise entry whose roll range matches.</li>
-          <li>Apply Buy/Sell DMs and evaluate legality.</li>
-        </ul>
+      <div id="results">
+        <div class="muted">No results yet.</div>
       </div>
-    </div>
-  </section>
+    </section>
+  </main>
 
-  <!-- RESULTS -->
-  <section class="card">
-    <div class="card-header">
-      <h2>Results</h2>
-      <div id="resultsMeta" class="muted"></div>
+  <!-- MODAL -->
+  <div id="modalOverlay" class="modal-overlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header">
+        <h3 id="modalTitle">Modal</h3>
+        <button id="modalClose" class="btn-ghost" type="button">Close</button>
+      </div>
+      <div id="modalBody"></div>
     </div>
-
-    <div id="results">
-      <div class="muted">No results yet.</div>
-    </div>
-  </section>
-
-</main>
-
-<div id="modalOverlay" class="modal-overlay" hidden>
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal-header">
-      <h3 id="modalTitle">Modal</h3>
-      <button id="modalClose" class="btn-ghost" type="button">Close</button>
-    </div>
-    <div id="modalBody"></div>
   </div>
-</div>
 
-<script src="./app.js"></script>
-
+  <script src="./app.js"></script>
 </body>
 </html>

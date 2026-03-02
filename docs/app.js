@@ -25,7 +25,7 @@ const WORLD_TRADE_CLASS_KEYS = new Set(["Ind", "nInd", "Ag", "Desert", "Water", 
 const TOKEN_ALIASES = new Map([
   // Column trade-classes
   ["IN", "Ind"], ["IND", "Ind"], ["INDUSTRIAL", "Ind"],
-  ["NI", "nInd"], ["NIND", "nInd"], ["NONIND", "nInd"], ["NON-IND", "nInd"], ["NONINDUSTRIAL", "nInd"], ["NON-INDUSTRIAL", "nInd"],
+  ["NI", "nInd"], ["NIND", "nInd"], ["NONIND", "nInd"], ["NON-IND", "nInd"], ["NONINDUSTRIAL", "nInd"],
   ["AG", "Ag"], ["AGRICULTURAL", "Ag"],
   ["DE", "Desert"], ["DES", "Desert"], ["DESERT", "Desert"],
   ["WA", "Water"], ["WATER", "Water"],
@@ -34,25 +34,14 @@ const TOKEN_ALIASES = new Map([
   // Common trade codes / tags referenced by table modifiers
   ["RI", "Rich"], ["RICH", "Rich"],
   ["PO", "Poor"], ["POOR", "Poor"],
-
-  // Balkanization synonyms (user input)
-  ["BA", "Balkanized"], ["BALK", "Balkanized"], ["BALKANIZED", "Balkanized"], ["BALKANISATION", "Balkanized"], ["BALKANIZATION", "Balkanized"],
-
-  // Travel zones (for completeness; only Amber/Red currently matter)
+  ["BA", "Balkanized"], ["BALK", "Balkanized"], ["BALKANIZED", "Balkanized"],
   ["AM", "Amber"], ["AMBER", "Amber"],
-  ["RED", "Red"],
-  ["GREEN", "Green"],
+  ["RED", "Red"], ["GREEN", "Green"],
 
   // Other condition tokens used by the JSON (buy/sell DMs, column DMs)
-  ["NA", "nAg"], ["NAG", "nAg"], ["NONAG", "nAg"], ["NON-AG", "nAg"], ["NON-AGRICULTURAL", "nAg"],
+  ["NA", "nAg"], ["NAG", "nAg"], ["NONAG", "nAg"], ["NON-AG", "nAg"],
   ["INNER", "Inner"], ["OUTER", "Outer"],
-
-  // Habitability (only Habitable currently used by modifiers)
-  ["HAB", "Habitable"], ["HABITABLE", "Habitable"],
-  ["INHAB", "Inhabitable"], ["INHABITABLE", "Inhabitable"],
-
-  // Convenience: allow Gov7 / G7 to imply Balkanized if typed in the profile line
-  ["G7", "Balkanized"], ["GOV7", "Balkanized"], ["GOV-7", "Balkanized"],
+  ["HAB", "Habitable"], ["HABITABLE", "Habitable"], ["INHABITABLE", "Inhabitable"],
 ]);
 
 function normalizeToken(t) {
@@ -130,18 +119,14 @@ function mergeContextOverrides(world) {
   if (zone) merged.add(zone);
 
   const habitability = $("#habitability")?.value;
-  // Only Habitable currently matters to per-column DMs; Inhabitable is retained as inert context.
-  if (habitability) merged.add(habitability);
-  // BUT: keep behavior explicit so you can change later without surprises.
-  // Column DMs currently reference "Habitable" only.
-  // No-op beyond adding the inert tag.
+  if (habitability === "Habitable") merged.add("Habitable"); // Inhabitable is inert
 
   const travelZone = $("#travelZone")?.value;
-  // Green is inert; Amber/Red may matter for multipliers (Amber already does in your tables).
-  if (travelZone) merged.add(travelZone);
+  // Green is inert; Amber/Red can be tags (Amber already used by some multipliers)
+  if (travelZone === "Amber" || travelZone === "Red") merged.add(travelZone);
 
   const gov = $("#governmentType")?.value;
-  // Only Balkanisation affects current trade modifiers; map to the condition key used by JSON.
+  // Only Balkanisation affects the current trade modifiers; map to the condition key used by JSON.
   if (gov === "7") merged.add("Balkanized");
 
   const econ = $("#economicStatus")?.value;
@@ -156,11 +141,21 @@ function setTheme(theme) {
   document.documentElement.dataset.theme = theme;
   localStorage.setItem("st_theme", theme);
   STATE.theme = theme;
+
+  const btn = $("#themeToggle");
+  if (btn) {
+    if (theme === "dark") btn.textContent = "Theme: Dark";
+    else if (theme === "light") btn.textContent = "Theme: Light";
+    else if (theme === "warm") btn.textContent = "Theme: Warm";
+    else btn.textContent = "Theme";
+  }
 }
 
 function toggleTheme() {
   const cur = STATE.theme ?? "dark";
-  setTheme(cur === "dark" ? "light" : "dark");
+  if (cur === "dark") setTheme("light");
+  else if (cur === "light") setTheme("warm");
+  else setTheme("dark");
 }
 
 /* --- Dice / selection --- */
@@ -261,7 +256,7 @@ function setDerivedUI(world) {
 }
 
 function clearResults() {
-  $("#results").innerHTML = `<div class="muted">No results yet.</div>`;
+  $("#results").innerHTML = "<div class=\"muted\">No results yet.</div>";
   $("#resultsMeta").textContent = "";
 }
 
@@ -328,7 +323,7 @@ function renderResults(rows) {
   const host = $("#results");
   host.innerHTML = "";
   if (!rows.length) {
-    host.innerHTML = `<div class="muted">No results yet.</div>`;
+    host.innerHTML = "<div class=\"muted\">No results yet.</div>";
     $("#resultsMeta").textContent = "";
     return;
   }
@@ -413,8 +408,7 @@ async function openNoticeModal() {
   if (!text) {
     openModal(
       "Legal / NOTICE",
-      `<p>Unable to load NOTICE.</p>
-       <p class="muted">If you publish via GitHub Pages using <code>/docs</code> as the site root, place a copy of <code>NOTICE</code> inside <code>docs/</code> to make it available to the app.</p>`
+      "<p>Unable to load NOTICE.</p><p class=\"muted\">If you publish via GitHub Pages using <code>/docs</code> as the site root, place a copy of <code>NOTICE</code> inside <code>docs/</code> to make it available to the app.</p>"
     );
     return;
   }
@@ -425,14 +419,14 @@ async function openNoticeModal() {
 
 function openAboutModal() {
   openModal("About", `
-    <p>This web app generates speculative trade lots using JSON-transcribed tables and a Traveller-style world profile line.</p>
-    <p>Attribution and licensing details are included in the repository README and NOTICE.</p>
+    <p><b>Speculative Trade Generator</b> is a no-build, single-page web app that rolls speculative trade lots from JSON-transcribed tables.</p>
+    <p class="muted">Attribution and licensing are documented in the repository <code>README.md</code> and <code>NOTICE</code>.</p>
   `);
 }
 
 function renderColumnModifierDoc() {
   const cols = STATE.tradeColumns;
-  if (!cols) return `<p class="muted">Tables not loaded yet.</p>`;
+  if (!cols) return "<p class=\"muted\">Tables not loaded yet.</p>";
 
   const lines = [];
   const order = ["Ind", "nInd", "Ag", "Desert", "Water", "Vacc", "None"];
@@ -445,7 +439,7 @@ function renderColumnModifierDoc() {
     lines.push(`<li><b>${key}</b>: ${ruleStr}</li>`);
   }
 
-  if (!lines.length) return `<p class="muted">No per-column modifiers found.</p>`;
+  if (!lines.length) return "<p class=\"muted\">No per-column modifiers found.</p>";
   return `<ul>${lines.join("")}</ul>`;
 }
 
@@ -461,29 +455,28 @@ function openHelpModal() {
     ["Po", "Poor"],
     ["Na", "nAg"],
     ["Ba", "Balkanized"],
-    ["Green/Amber/Red", "Travel zone tags"],
-    ["Inner/Outer", "Zone tags"],
-    ["Habitable/Inhabitable", "Habitability tag"],
+    ["Amber", "Amber"],
+    ["Inner/Outer", "Inner/Outer"],
   ];
 
-  const aliasHtml = aliasPairs.map(([a, b]) => `<code>${a}</code>→<span>${b}</span>`).join(", ");
+  const aliasHtml = aliasPairs.map(([a, b]) => `<code>${a}</code>→<code>${b}</code>`).join(", ");
 
   openModal("Help", `
     <h4>Input</h4>
     <p>Enter <b>UWP</b> first, then any codes/tags (example: <code>A867A74-C Ag Ri In Inner Amber</code>).</p>
-    <p class="muted">Accepted abbreviations/tags: ${aliasHtml}</p>
+    <p class="muted">Accepted abbreviations: ${aliasHtml}</p>
 
-    <h4>How the app applies the rules</h4>
-    <ul>
-      <li>Roll 1D6 for <b>column</b> (trade class).</li>
-      <li>If the rolled trade class is not present on the world, treat it as <b>None</b>.</li>
-      <li>Apply any matching <b>per-column modifiers</b> (DMs) for that trade class (e.g., TL bands, Rich, Balkanized, Inner/Outer, Habitable).</li>
-      <li>After applying DMs, re-select the trade class from the adjusted column roll (and again fall back to None if not present on the world).</li>
-      <li>Roll 1D6 for <b>row</b> within the resulting column to get a merchandise category.</li>
+    <h4>Algorithm</h4>
+    <ol>
+      <li>Roll 1D6 for the <b>column</b>. This maps to a trade class per the table.</li>
+      <li>If the rolled trade class is <b>not present</b> in your world’s trade classes, treat it as <b>None</b>.</li>
+      <li>Apply <b>per-column modifiers</b> (DMs) for that trade class when their conditions match (TL bands, Rich, Balkanized, Inner/Outer, Habitable).</li>
+      <li>After applying the DM, re-select the trade class from the adjusted column roll (and again fall back to None if not present on the world).</li>
+      <li>Roll 1D6 for the <b>row</b> within the resulting column to get a merchandise category.</li>
       <li>Select the merchandise entry whose roll range includes that row roll.</li>
       <li>Compute <b>Buy/Sell DM</b> from the item’s modifiers (based on matching conditions).</li>
       <li>Evaluate <b>Legality</b>: an item with LG X is legal if <b>Law ≤ X</b> (or ≤ the max of a range like <code>3-4</code>).</li>
-    </ul>
+    </ol>
 
     <h4>Per-column modifiers</h4>
     ${renderColumnModifierDoc()}
@@ -491,8 +484,7 @@ function openHelpModal() {
     <h4>Notes</h4>
     <ul>
       <li><b>Trade classes present</b> are only the column classes: Ind, nInd, Ag, Desert, Water, Vacc.</li>
-      <li>Other tokens (e.g. Rich, Poor, Amber/Red, Inner/Outer, Habitable) are treated as <b>conditions</b> that may affect DMs, multipliers, or Buy/Sell DM.</li>
-      <li>The UI includes a full <b>Government type</b> list for completeness; currently only <b>Balkanisation (7)</b> maps to the <code>Balkanized</code> condition used by the tables.</li>
+      <li>Other tokens (e.g. Rich, Poor, Amber, Balkanized, Inner/Outer) are treated as <b>conditions</b> that may affect DMs, multipliers, or buy/sell modifiers.</li>
     </ul>
   `);
 }
@@ -544,7 +536,7 @@ function wireEvents() {
 
 (function main() {
   const saved = localStorage.getItem("st_theme");
-  if (saved === "light" || saved === "dark") setTheme(saved);
+  if (saved === "light" || saved === "dark" || saved === "warm") setTheme(saved);
   else {
     const prefersLight = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches;
     setTheme(prefersLight ? "light" : "dark");
