@@ -1,0 +1,36 @@
+# Speculative Trade Generator — Contract Manifest (served from /docs)
+# Lines:
+#   FILE <relative-path>
+#   ID   <dom-id>
+
+FILE index.html
+FILE styles.css
+FILE app.js
+FILE trade-columns.json
+FILE merchandise.json
+FILE NOTICE
+FILE assets/speculative-trade-original.jpeg
+
+ID btnAbout
+ID btnHelp
+ID btnLegal
+ID themeToggle
+
+ID worldProfile
+ID rollCount
+ID useRandom
+
+ID zone
+ID habitability
+ID travelZone
+ID governmentType
+ID economicStatus
+
+ID dataStatus
+ID results
+ID resultsMeta
+
+ID modalOverlay
+ID modalTitle
+ID modalBody
+ID modalClose
