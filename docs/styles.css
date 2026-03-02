@@ -1,11 +1,12 @@
 /* SPDX-License-Identifier: MIT */
 
 /* ------------------------------------------------------------
-   Speculative Trade Generator — Styles (no build step)
-   Matches current docs/index.html + app.js DOM output.
+   Speculative Trade Generator — styles.css
+   Fixes modal visibility bug (hidden must win).
 ------------------------------------------------------------ */
 
-/* -------- Theme Tokens -------- */
+/* IMPORTANT: ensure hidden always wins */
+[hidden] { display: none !important; }
 
 :root {
   --max-width: 1100px;
@@ -36,8 +37,6 @@ html[data-theme="light"] {
   --shadow: 0 14px 40px rgba(0, 0, 0, 0.12);
 }
 
-/* -------- Base / Layout -------- */
-
 * { box-sizing: border-box; }
 
 body {
@@ -62,8 +61,7 @@ body {
   padding: 0 0 64px 0;
 }
 
-/* -------- Header -------- */
-
+/* Header */
 .topbar {
   padding: 28px 0 18px 0;
 }
@@ -100,8 +98,7 @@ body {
   flex-wrap: wrap;
 }
 
-/* -------- Cards -------- */
-
+/* Cards */
 .card {
   background: var(--panel);
   border: 1px solid var(--border);
@@ -130,7 +127,6 @@ body {
   margin: 6px 0 10px 0;
   font-size: 14px;
   font-weight: 650;
-  color: var(--text);
 }
 
 .muted {
@@ -139,8 +135,7 @@ body {
   line-height: 1.35;
 }
 
-/* -------- Mode Controls -------- */
-
+/* Mode toggle */
 .mode-toggle {
   display: inline-flex;
   gap: 8px;
@@ -173,14 +168,7 @@ body {
   margin-top: 6px;
 }
 
-.trade-codes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 10px 0 10px 0;
-}
-
-/* This class is injected by app.js when it renders checkboxes. */
+/* Trade code “pills” injected by JS */
 .pill {
   display: inline-flex;
   align-items: center;
@@ -193,9 +181,7 @@ body {
   user-select: none;
 }
 
-.pill input {
-  margin: 0;
-}
+.pill input { margin: 0; }
 
 /* Inputs */
 label {
@@ -233,8 +219,7 @@ input[type="checkbox"] {
   align-items: center;
 }
 
-/* -------- Buttons -------- */
-
+/* Buttons */
 .btn-ghost {
   background: transparent;
   border: 1px solid var(--border);
@@ -245,9 +230,7 @@ input[type="checkbox"] {
   cursor: pointer;
 }
 
-.btn-ghost:hover {
-  background: rgba(255, 255, 255, 0.06);
-}
+.btn-ghost:hover { background: rgba(255, 255, 255, 0.06); }
 
 .btn-primary {
   background: rgba(120, 90, 255, 0.85);
@@ -259,29 +242,9 @@ input[type="checkbox"] {
   cursor: pointer;
 }
 
-.btn-primary:hover {
-  background: rgba(120, 90, 255, 0.95);
-}
+.btn-primary:hover { background: rgba(120, 90, 255, 0.95); }
 
-/* -------- Advanced Panel -------- */
-
-.advanced-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px 14px;
-  margin-top: 10px;
-}
-
-.advanced-grid label {
-  margin: 0;
-}
-
-/* -------- Results -------- */
-
-#results {
-  margin-top: 12px;
-}
-
+/* Results cards injected by JS */
 .result {
   border: 1px solid var(--border);
   background: rgba(255, 255, 255, 0.04);
@@ -310,7 +273,6 @@ input[type="checkbox"] {
   border-radius: 999px;
   border: 1px solid rgba(40, 220, 140, 0.35);
   background: rgba(40, 220, 140, 0.12);
-  color: var(--text);
   white-space: nowrap;
 }
 
@@ -319,33 +281,20 @@ input[type="checkbox"] {
   background: rgba(255, 170, 0, 0.14);
 }
 
-.kv {
-  display: grid;
-  grid-template-columns: 160px 1fr;
-  gap: 8px 12px;
-  margin-top: 10px;
-}
-
-.k {
-  color: var(--muted);
-  font-size: 12px;
-}
-
-.v {
-  font-size: 13px;
-}
-
-/* -------- Modal -------- */
-
+/* Modal — fixed: don’t force visible when hidden */
 .modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.55);
-  display: flex;
   align-items: center;
   justify-content: center;
   padding: 24px;
   z-index: 50;
+  display: none; /* default */
+}
+
+.modal-overlay:not([hidden]) {
+  display: flex; /* only when shown */
 }
 
 .modal {
@@ -367,13 +316,7 @@ input[type="checkbox"] {
   margin-bottom: 10px;
 }
 
-.modal-header h3 {
-  margin: 0;
-}
-
-#modalBody {
-  color: var(--text);
-}
+.modal-header h3 { margin: 0; }
 
 .notice-pre {
   white-space: pre-wrap;
@@ -386,24 +329,14 @@ input[type="checkbox"] {
   background: rgba(0, 0, 0, 0.20);
 }
 
-/* -------- Responsive -------- */
-
+/* Responsive */
 @media (max-width: 860px) {
-  .header-inner {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .mode-grid {
-    grid-template-columns: 1fr;
-  }
-  .kv {
-    grid-template-columns: 1fr;
-  }
+  .header-inner { flex-direction: column; align-items: flex-start; }
+  .mode-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 520px) {
   .container { padding: 0 16px; }
   .brand h1 { font-size: 24px; }
   .card { padding: 18px; }
-  .advanced-grid { grid-template-columns: 1fr; }
 }
