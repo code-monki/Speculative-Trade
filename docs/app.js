@@ -433,8 +433,8 @@ function openAboutModal() {
     <p>
       Source code:
       <br>
-      <a href="https://github.com/<user>/<repo>" target="_blank" rel="noopener noreferrer">
-        https://github.com/<user>/<repo>
+      <a href="https://github.com/code-monki/Speculative-Trade" target="_blank" rel="noopener noreferrer">
+        https://github.com/code-monki/Speculative-Trade
       </a>
     </p>
 
