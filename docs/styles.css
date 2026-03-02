@@ -100,13 +100,12 @@ body {
 
 /* Cards */
 .card {
-  background: var(--panel);
   border: 1px solid var(--border);
+  background: var(--panel);
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
   padding: 22px 22px;
   margin: 18px 0;
-  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow);
 }
 
 .card-header {
@@ -135,32 +134,7 @@ body {
   line-height: 1.35;
 }
 
-/* Mode toggle */
-.mode-toggle {
-  display: inline-flex;
-  gap: 8px;
-  padding: 6px;
-  background: var(--panel2);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-}
-
-.mode-toggle button {
-  border: 1px solid transparent;
-  background: transparent;
-  color: var(--muted);
-  padding: 6px 12px;
-  border-radius: 999px;
-  cursor: pointer;
-  font-size: 13px;
-}
-
-.mode-toggle button[aria-selected="true"] {
-  background: rgba(120, 90, 255, 0.20);
-  border-color: rgba(120, 90, 255, 0.35);
-  color: var(--text);
-}
-
+/* Layout */
 .mode-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -168,22 +142,6 @@ body {
   margin-top: 6px;
 }
 
-/* Trade code “pills” injected by JS */
-.pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 10px;
-  border-radius: 999px;
-  background: var(--panel2);
-  border: 1px solid var(--border);
-  cursor: pointer;
-  user-select: none;
-}
-
-.pill input { margin: 0; }
-
-/* Inputs */
 label {
   display: block;
   margin: 10px 0;
@@ -303,7 +261,11 @@ input[type="checkbox"] {
   overflow: auto;
   border-radius: 16px;
   border: 1px solid var(--border);
+
+  /* fallback first (helps lint/tools that dislike color-mix) */
+  background: var(--bg1);
   background: color-mix(in srgb, var(--bg1) 85%, black 15%);
+
   box-shadow: var(--shadow);
   padding: 14px 14px;
 }
@@ -339,4 +301,106 @@ input[type="checkbox"] {
   .container { padding: 0 16px; }
   .brand h1 { font-size: 24px; }
   .card { padding: 18px; }
+}
+
+/* ------------------------------------------------------------
+   Additions for World Profile UI + docs-style helpers
+------------------------------------------------------------ */
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.95em;
+  padding: 0 0.25em;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid var(--border);
+}
+
+html[data-theme="light"] code {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+input[type="text"] {
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.18);
+  color: var(--text);
+  outline: none;
+}
+
+html[data-theme="light"] input[type="text"] {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+label.inline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  color: var(--muted);
+}
+
+.kv {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 8px 12px;
+  margin-top: 12px;
+}
+
+.kv .k {
+  color: var(--muted);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.kv .v {
+  color: var(--text);
+  font-size: 13px;
+}
+
+.details {
+  margin-top: 12px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.details > summary {
+  cursor: pointer;
+  padding: 10px 12px;
+  color: var(--text);
+  font-weight: 650;
+}
+
+.details-body {
+  padding: 0 12px 12px 12px;
+}
+
+.advanced-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 860px) {
+  .kv { grid-template-columns: 1fr; }
+  .advanced-grid { grid-template-columns: 1fr; }
+}
+
+/* Optional: make headings in modal content look consistent */
+#modalBody h4 {
+  margin: 12px 0 6px 0;
+  font-size: 14px;
+}
+
+#modalBody ul, #modalBody ol {
+  margin: 8px 0 12px 18px;
+}
+
+#modalBody p {
+  margin: 8px 0;
 }

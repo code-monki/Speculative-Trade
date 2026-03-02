@@ -15,9 +15,7 @@
   <div class="container header-inner">
     <div class="brand">
       <h1>Speculative Trade Generator</h1>
-      <p class="subtitle">
-        Loads trade tables from JSON and generates lots via 1D6 column + 1D6 row.
-      </p>
+      <p class="subtitle">Enter a world profile (UWP + codes/tags) and generate lots via 1D6 column + 1D6 row.</p>
     </div>
 
     <nav class="header-actions" aria-label="Primary">
@@ -31,48 +29,113 @@
 
 <main class="page container">
 
-  <!-- MODE CARD -->
   <section class="card">
     <div class="card-header">
-      <h2>Mode</h2>
-      <div class="mode-toggle">
-        <button id="modeMinimal" type="button">Minimal</button>
-        <button id="modeAdvanced" type="button">Advanced</button>
+      <h2>World profile</h2>
+      <div id="dataStatus" class="muted">Loading tables…</div>
+    </div>
+
+    <label>
+      UWP + trade codes / tags
+      <input id="worldProfile" type="text" spellcheck="false" autocomplete="off"
+             placeholder="Example: A867A74-C Ag Ri In Inner Amber">
+    </label>
+
+    <p class="muted">
+      Format: <b>UWP</b> first (e.g. <code>A867A74-C</code>) followed by any number of codes/tags.
+      Common abbreviations are accepted (e.g. <code>In</code>→Ind, <code>Ni</code>→nInd, <code>De</code>→Desert, <code>Wa</code>→Water, <code>Va</code>→Vacc, <code>Ri</code>→Rich, <code>Po</code>→Poor).
+    </p>
+
+    <div class="kv">
+      <div class="k">Derived</div>
+      <div class="v">
+        Starport <span id="derivedStarport">—</span> •
+        TL <span id="derivedTL">—</span> •
+        Law <span id="derivedLaw">—</span>
       </div>
+
+      <div class="k">World trade classes</div>
+      <div class="v"><span id="derivedTradeCodes">—</span></div>
+
+      <div class="k">Tags / conditions</div>
+      <div class="v"><span id="derivedTags">—</span></div>
+    </div>
+
+    <details class="details">
+      <summary>World context (optional)</summary>
+      <div class="details-body">
+        <p class="muted">
+          If you don’t include these in the profile line, you can set them here. They influence column modifiers when applicable.
+        </p>
+
+        <div class="advanced-grid">
+          <label>
+            Zone
+            <select id="zone">
+              <option value="">—</option>
+              <option value="Outer">Outer</option>
+              <option value="Inner">Inner</option>
+            </select>
+          </label>
+
+          <label>
+            Habitable
+            <select id="habitable">
+              <option value="">—</option>
+              <option value="Habitable">Habitable</option>
+            </select>
+          </label>
+
+          <label>
+            Travel zone
+            <select id="travelZone">
+              <option value="">—</option>
+              <option value="Amber">Amber</option>
+            </select>
+          </label>
+
+          <label>
+            Balkanized
+            <select id="balkanized">
+              <option value="">—</option>
+              <option value="Balkanized">Balkanized</option>
+            </select>
+          </label>
+
+          <label>
+            Rich
+            <select id="rich">
+              <option value="">—</option>
+              <option value="Rich">Rich</option>
+            </select>
+          </label>
+
+          <label>
+            Poor
+            <select id="poor">
+              <option value="">—</option>
+              <option value="Poor">Poor</option>
+            </select>
+          </label>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <section class="card">
+    <div class="card-header">
+      <h2>Generation</h2>
+      <div class="muted">Legality uses the derived Law level (from the UWP).</div>
     </div>
 
     <div class="mode-grid">
       <div>
-        <h3>World trade codes</h3>
-
-        <div id="tradeCodeBox" class="trade-codes">
-          <label><input type="checkbox" value="Ind"> Ind</label>
-          <label><input type="checkbox" value="nInd"> nInd</label>
-          <label><input type="checkbox" value="Ag"> Ag</label>
-          <label><input type="checkbox" value="Desert"> Desert</label>
-          <label><input type="checkbox" value="Water"> Water</label>
-          <label><input type="checkbox" value="Vacc"> Vacc</label>
-        </div>
-
-        <p class="muted">
-          Select the world’s trade codes. Column rolls that don’t match a selected trade code fall back to None.
-        </p>
-      </div>
-
-      <div>
-        <h3>Generation</h3>
-
         <label>
           Number of lots
           <input id="rollCount" type="number" min="1" max="50" value="6">
         </label>
 
-        <label>
-          Law Level (for legality checks)
-          <input id="lawLevel" type="number" min="0" max="15" value="0">
-        </label>
-
-        <label>
+        <label class="inline">
           <input id="useRandom" type="checkbox" checked>
           Use random dice (otherwise, prompts per roll)
         </label>
@@ -82,57 +145,21 @@
           <button id="btnClear" class="btn-ghost" type="button">Clear</button>
         </div>
       </div>
-    </div>
 
-    <!-- ADVANCED PANEL -->
-    <div id="advancedPanel" hidden>
-      <h3>Advanced modifiers</h3>
-
-      <div class="advanced-grid">
-        <label><input id="flagRich" type="checkbox"> Rich</label>
-        <label><input id="flagPoor" type="checkbox"> Poor</label>
-        <label><input id="flagBalkanized" type="checkbox"> Balkanized</label>
-        <label><input id="flagAmber" type="checkbox"> Amber</label>
-        <label><input id="flagHabitable" type="checkbox"> Habitable</label>
-
-        <label>
-          Zone
-          <select id="zone">
-            <option value="">—</option>
-            <option value="Outer">Outer</option>
-            <option value="Inner">Inner</option>
-          </select>
-        </label>
-
-        <label>
-          Tech Level
-          <input id="techLevel" type="number" min="0" max="15" value="8">
-        </label>
-
-        <label>
-          Starport
-          <select id="starport">
-            <option value="">—</option>
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-            <option value="D">D</option>
-            <option value="E">E</option>
-            <option value="X">X</option>
-          </select>
-        </label>
+      <div>
+        <p class="muted">
+          Column roll selects a trade class (Ind/nInd/Ag/Desert/Water/Vacc). If the rolled class is not present on the world,
+          the result falls back to None. Per-column modifiers are always applied when their conditions match.
+        </p>
       </div>
     </div>
-
   </section>
 
-  <!-- RESULTS CARD -->
   <section class="card">
     <div class="card-header">
       <h2>Results</h2>
-      <div id="dataStatus" class="muted">Loading tables…</div>
+      <div id="resultsMeta" class="muted"></div>
     </div>
-
     <div id="results">
       <div class="muted">No results yet.</div>
     </div>
@@ -140,9 +167,8 @@
 
 </main>
 
-<!-- MODAL -->
 <div id="modalOverlay" class="modal-overlay" hidden>
-  <div class="modal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-header">
       <h3 id="modalTitle">Modal</h3>
       <button id="modalClose" class="btn-ghost" type="button">Close</button>
