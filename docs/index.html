@@ -29,6 +29,7 @@
 
 <main class="page container">
 
+  <!-- WORLD PROFILE -->
   <section class="card">
     <div class="card-header">
       <h2>World profile</h2>
@@ -42,8 +43,10 @@
     </label>
 
     <p class="muted">
-      Format: <b>UWP</b> first (e.g. <code>A867A74-C</code>) followed by any number of codes/tags.
-      Common abbreviations are accepted (e.g. <code>In</code>→Ind, <code>Ni</code>→nInd, <code>De</code>→Desert, <code>Wa</code>→Water, <code>Va</code>→Vacc, <code>Ri</code>→Rich, <code>Po</code>→Poor).
+      Format: <b>UWP</b> first (e.g. <code>A867A74-C</code>) followed by codes/tags.
+      Abbreviations accepted (e.g. <code>In</code>→Ind, <code>Ni</code>→nInd,
+      <code>De</code>→Desert, <code>Wa</code>→Water, <code>Va</code>→Vacc,
+      <code>Ri</code>→Rich, <code>Po</code>→Poor).
     </p>
 
     <div class="kv">
@@ -65,7 +68,7 @@
       <summary>World context (optional)</summary>
       <div class="details-body">
         <p class="muted">
-          If you don’t include these in the profile line, you can set them here. They influence column modifiers when applicable.
+          Optional contextual flags. Currently only <b>Balkanisation (Gov 7)</b> maps to the <code>Balkanized</code> condition used by the tables.
         </p>
 
         <div class="advanced-grid">
@@ -79,10 +82,11 @@
           </label>
 
           <label>
-            Habitable
-            <select id="habitable">
+            Habitability
+            <select id="habitability">
               <option value="">—</option>
               <option value="Habitable">Habitable</option>
+              <option value="Inhabitable">Inhabitable</option>
             </select>
           </label>
 
@@ -90,30 +94,38 @@
             Travel zone
             <select id="travelZone">
               <option value="">—</option>
+              <option value="Green">Green</option>
               <option value="Amber">Amber</option>
+              <option value="Red">Red</option>
             </select>
           </label>
 
           <label>
-            Balkanized
-            <select id="balkanized">
+            Government type
+            <select id="governmentType">
               <option value="">—</option>
-              <option value="Balkanized">Balkanized</option>
+              <option value="0">0 — None</option>
+              <option value="1">1 — Company/Corporation</option>
+              <option value="2">2 — Participating Democracy</option>
+              <option value="3">3 — Self-Perpetuating Oligarchy</option>
+              <option value="4">4 — Representative Democracy</option>
+              <option value="5">5 — Feudal Technocracy</option>
+              <option value="6">6 — Captive Government</option>
+              <option value="7">7 — Balkanisation</option>
+              <option value="8">8 — Civil Service Bureaucracy</option>
+              <option value="9">9 — Impersonal Bureaucracy</option>
+              <option value="A">A — Charismatic Dictator</option>
+              <option value="B">B — Non-Charistmatic Dictator</option>
+              <option value="C">C — Charismatic Oligarchy</option>
+              <option value="D">D — Religious Dictatorship</option>
             </select>
           </label>
 
           <label>
-            Rich
-            <select id="rich">
+            World economic status
+            <select id="economicStatus">
               <option value="">—</option>
               <option value="Rich">Rich</option>
-            </select>
-          </label>
-
-          <label>
-            Poor
-            <select id="poor">
-              <option value="">—</option>
               <option value="Poor">Poor</option>
             </select>
           </label>
@@ -122,10 +134,10 @@
     </details>
   </section>
 
+  <!-- GENERATION -->
   <section class="card">
     <div class="card-header">
       <h2>Generation</h2>
-      <div class="muted">Legality uses the derived Law level (from the UWP).</div>
     </div>
 
     <div class="mode-grid">
@@ -137,7 +149,7 @@
 
         <label class="inline">
           <input id="useRandom" type="checkbox" checked>
-          Use random dice (otherwise, prompts per roll)
+          Use random dice (otherwise prompts per roll)
         </label>
 
         <div class="action-row">
@@ -146,20 +158,31 @@
         </div>
       </div>
 
-      <div>
-        <p class="muted">
-          Column roll selects a trade class (Ind/nInd/Ag/Desert/Water/Vacc). If the rolled class is not present on the world,
-          the result falls back to None. Per-column modifiers are always applied when their conditions match.
-        </p>
+      <div class="generation-notes" role="note" aria-label="Generation notes">
+        <div class="note-title">Legality</div>
+        <p class="muted">Uses the derived <b>Law</b> level from the UWP.</p>
+
+        <div class="note-title">How lots are generated</div>
+        <ul class="generation-list muted">
+          <li>Roll 1D6 for column (trade class).</li>
+          <li>If the rolled class is not present on the world, treat it as <b>None</b>.</li>
+          <li>Apply any matching per-column modifiers (DMs).</li>
+          <li>Re-select the trade class after DM adjustment.</li>
+          <li>Roll 1D6 for row within the resulting column.</li>
+          <li>Select the merchandise entry whose roll range matches.</li>
+          <li>Apply Buy/Sell DMs and evaluate legality.</li>
+        </ul>
       </div>
     </div>
   </section>
 
+  <!-- RESULTS -->
   <section class="card">
     <div class="card-header">
       <h2>Results</h2>
       <div id="resultsMeta" class="muted"></div>
     </div>
+
     <div id="results">
       <div class="muted">No results yet.</div>
     </div>

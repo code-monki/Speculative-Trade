@@ -1,11 +1,6 @@
 /* SPDX-License-Identifier: MIT */
 
-/* ------------------------------------------------------------
-   Speculative Trade Generator — styles.css
-   Fixes modal visibility bug (hidden must win).
------------------------------------------------------------- */
-
-/* IMPORTANT: ensure hidden always wins */
+/* Ensure hidden always wins */
 [hidden] { display: none !important; }
 
 :root {
@@ -14,7 +9,6 @@
   --bg0: #0b0c10;
   --bg1: #0f1220;
   --panel: rgba(255, 255, 255, 0.06);
-  --panel2: rgba(255, 255, 255, 0.08);
   --border: rgba(255, 255, 255, 0.10);
 
   --text: rgba(255, 255, 255, 0.92);
@@ -22,26 +16,27 @@
 
   --shadow: 0 16px 50px rgba(0, 0, 0, 0.45);
   --radius: 16px;
+
+  --accent: rgba(120, 90, 255, 0.90);
 }
 
 html[data-theme="light"] {
   --bg0: #f5f6fb;
   --bg1: #eef0f7;
   --panel: rgba(0, 0, 0, 0.05);
-  --panel2: rgba(0, 0, 0, 0.07);
   --border: rgba(0, 0, 0, 0.10);
 
   --text: rgba(0, 0, 0, 0.88);
   --muted: rgba(0, 0, 0, 0.60);
 
   --shadow: 0 14px 40px rgba(0, 0, 0, 0.12);
+  --accent: rgba(90, 70, 255, 0.95);
 }
 
 * { box-sizing: border-box; }
 
 body {
   margin: 0;
-  padding: 0;
   color: var(--text);
   font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   background:
@@ -57,14 +52,10 @@ body {
   padding: 0 24px;
 }
 
-.page {
-  padding: 0 0 64px 0;
-}
+.page { padding: 0 0 64px 0; }
 
 /* Header */
-.topbar {
-  padding: 28px 0 18px 0;
-}
+.topbar { padding: 28px 0 18px 0; }
 
 .header-inner {
   display: flex;
@@ -73,15 +64,12 @@ body {
   gap: 16px;
 }
 
-.brand {
-  max-width: 760px;
-}
+.brand { max-width: 760px; }
 
 .brand h1 {
   margin: 0;
   font-size: 28px;
-  font-weight: 700;
-  letter-spacing: 0.2px;
+  font-weight: 720;
 }
 
 .subtitle {
@@ -103,7 +91,7 @@ body {
   border: 1px solid var(--border);
   background: var(--panel);
   border-radius: var(--radius);
-  padding: 22px 22px;
+  padding: 22px;
   margin: 18px 0;
   box-shadow: var(--shadow);
 }
@@ -119,13 +107,7 @@ body {
 .card h2 {
   margin: 0;
   font-size: 18px;
-  font-weight: 700;
-}
-
-.card h3 {
-  margin: 6px 0 10px 0;
-  font-size: 14px;
-  font-weight: 650;
+  font-weight: 720;
 }
 
 .muted {
@@ -133,6 +115,17 @@ body {
   font-size: 13px;
   line-height: 1.35;
 }
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.95em;
+  padding: 0 0.25em;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid var(--border);
+}
+
+html[data-theme="light"] code { background: rgba(255, 255, 255, 0.85); }
 
 /* Layout */
 .mode-grid {
@@ -150,6 +143,7 @@ label {
 }
 
 input[type="number"],
+input[type="text"],
 select {
   width: 100%;
   margin-top: 6px;
@@ -162,12 +156,19 @@ select {
 }
 
 html[data-theme="light"] input[type="number"],
+html[data-theme="light"] input[type="text"],
 html[data-theme="light"] select {
   background: rgba(255, 255, 255, 0.85);
 }
 
-input[type="checkbox"] {
-  accent-color: rgba(120, 90, 255, 0.95);
+input[type="checkbox"] { accent-color: var(--accent); }
+
+label.inline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  color: var(--muted);
 }
 
 .action-row {
@@ -187,30 +188,106 @@ input[type="checkbox"] {
   border-radius: 10px;
   cursor: pointer;
 }
-
 .btn-ghost:hover { background: rgba(255, 255, 255, 0.06); }
 
 .btn-primary {
-  background: rgba(120, 90, 255, 0.85);
-  border: 1px solid rgba(120, 90, 255, 0.85);
+  background: var(--accent);
+  border: 1px solid var(--accent);
   color: #fff;
   padding: 8px 14px;
   font-size: 13px;
   border-radius: 12px;
   cursor: pointer;
 }
+.btn-primary:hover { filter: brightness(1.08); }
 
-.btn-primary:hover { background: rgba(120, 90, 255, 0.95); }
+/* World profile key/values */
+.kv {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 8px 12px;
+  margin-top: 12px;
+}
+.kv .k {
+  color: var(--muted);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.kv .v { color: var(--text); font-size: 13px; }
 
-/* Results cards injected by JS */
+/* Details block */
+.details {
+  margin-top: 12px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+}
+.details > summary {
+  cursor: pointer;
+  padding: 10px 12px;
+  color: var(--text);
+  font-weight: 650;
+}
+.details-body { padding: 0 12px 12px 12px; }
+
+/* 5-column context grid */
+.advanced-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* Generation notes panel */
+.generation-notes {
+  align-self: start;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 14px;
+  position: relative;
+}
+.generation-notes::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 3px;
+  border-radius: 999px;
+  background: var(--accent);
+  opacity: 0.75;
+}
+.generation-notes .note-title {
+  font-size: 12px;
+  font-weight: 720;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text);
+  margin: 2px 0 6px 0;
+  padding-left: 8px;
+}
+.generation-notes p {
+  margin: 0 0 10px 0;
+  padding-left: 8px;
+}
+.generation-notes p:last-child { margin-bottom: 0; }
+
+.generation-list {
+  margin: 6px 0 0 22px;
+  padding: 0 0 0 8px;
+}
+.generation-list li { margin: 4px 0; }
+
+/* Results */
 .result {
   border: 1px solid var(--border);
   background: rgba(255, 255, 255, 0.04);
   border-radius: 14px;
-  padding: 14px 14px;
+  padding: 14px;
   margin: 12px 0;
 }
-
 .result-head {
   display: flex;
   align-items: flex-start;
@@ -218,12 +295,7 @@ input[type="checkbox"] {
   gap: 12px;
   margin-bottom: 10px;
 }
-
-.result-title {
-  font-weight: 750;
-  font-size: 15px;
-  margin-bottom: 2px;
-}
+.result-title { font-weight: 750; font-size: 15px; margin-bottom: 2px; }
 
 .badge {
   font-size: 12px;
@@ -233,13 +305,12 @@ input[type="checkbox"] {
   background: rgba(40, 220, 140, 0.12);
   white-space: nowrap;
 }
-
 .badge-warn {
   border-color: rgba(255, 170, 0, 0.35);
   background: rgba(255, 170, 0, 0.14);
 }
 
-/* Modal — fixed: don’t force visible when hidden */
+/* Modal */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -248,12 +319,9 @@ input[type="checkbox"] {
   justify-content: center;
   padding: 24px;
   z-index: 50;
-  display: none; /* default */
+  display: none;
 }
-
-.modal-overlay:not([hidden]) {
-  display: flex; /* only when shown */
-}
+.modal-overlay:not([hidden]) { display: flex; }
 
 .modal {
   width: min(760px, 100%);
@@ -261,15 +329,10 @@ input[type="checkbox"] {
   overflow: auto;
   border-radius: 16px;
   border: 1px solid var(--border);
-
-  /* fallback first (helps lint/tools that dislike color-mix) */
   background: var(--bg1);
-  background: color-mix(in srgb, var(--bg1) 85%, black 15%);
-
   box-shadow: var(--shadow);
-  padding: 14px 14px;
+  padding: 14px;
 }
-
 .modal-header {
   display: flex;
   align-items: center;
@@ -277,7 +340,6 @@ input[type="checkbox"] {
   gap: 12px;
   margin-bottom: 10px;
 }
-
 .modal-header h3 { margin: 0; }
 
 .notice-pre {
@@ -292,115 +354,27 @@ input[type="checkbox"] {
 }
 
 /* Responsive */
+@media (max-width: 1100px) {
+  .advanced-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
 @media (max-width: 860px) {
   .header-inner { flex-direction: column; align-items: flex-start; }
   .mode-grid { grid-template-columns: 1fr; }
+  .kv { grid-template-columns: 1fr; }
+  .advanced-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  /* Slightly tighter controls on tablet widths */
+  label { font-size: 12.5px; }
+  input[type="number"], input[type="text"], select { padding: 9px 11px; }
 }
 
 @media (max-width: 520px) {
   .container { padding: 0 16px; }
   .brand h1 { font-size: 24px; }
   .card { padding: 18px; }
-}
-
-/* ------------------------------------------------------------
-   Additions for World Profile UI + docs-style helpers
------------------------------------------------------------- */
-
-code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.95em;
-  padding: 0 0.25em;
-  border-radius: 6px;
-  background: rgba(0, 0, 0, 0.18);
-  border: 1px solid var(--border);
-}
-
-html[data-theme="light"] code {
-  background: rgba(255, 255, 255, 0.85);
-}
-
-input[type="text"] {
-  width: 100%;
-  margin-top: 6px;
-  padding: 10px 12px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  background: rgba(0, 0, 0, 0.18);
-  color: var(--text);
-  outline: none;
-}
-
-html[data-theme="light"] input[type="text"] {
-  background: rgba(255, 255, 255, 0.85);
-}
-
-label.inline {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 10px;
-  color: var(--muted);
-}
-
-.kv {
-  display: grid;
-  grid-template-columns: 160px 1fr;
-  gap: 8px 12px;
-  margin-top: 12px;
-}
-
-.kv .k {
-  color: var(--muted);
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-
-.kv .v {
-  color: var(--text);
-  font-size: 13px;
-}
-
-.details {
-  margin-top: 12px;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.03);
-}
-
-.details > summary {
-  cursor: pointer;
-  padding: 10px 12px;
-  color: var(--text);
-  font-weight: 650;
-}
-
-.details-body {
-  padding: 0 12px 12px 12px;
-}
-
-.advanced-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-
-@media (max-width: 860px) {
-  .kv { grid-template-columns: 1fr; }
   .advanced-grid { grid-template-columns: 1fr; }
-}
 
-/* Optional: make headings in modal content look consistent */
-#modalBody h4 {
-  margin: 12px 0 6px 0;
-  font-size: 14px;
-}
-
-#modalBody ul, #modalBody ol {
-  margin: 8px 0 12px 18px;
-}
-
-#modalBody p {
-  margin: 8px 0;
+  /* Small-screen readability: slightly smaller labels, keep inputs comfy */
+  label { font-size: 12px; }
 }

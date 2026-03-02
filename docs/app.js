@@ -25,7 +25,7 @@ const WORLD_TRADE_CLASS_KEYS = new Set(["Ind", "nInd", "Ag", "Desert", "Water", 
 const TOKEN_ALIASES = new Map([
   // Column trade-classes
   ["IN", "Ind"], ["IND", "Ind"], ["INDUSTRIAL", "Ind"],
-  ["NI", "nInd"], ["NIND", "nInd"], ["NONIND", "nInd"], ["NON-IND", "nInd"], ["NONINDUSTRIAL", "nInd"],
+  ["NI", "nInd"], ["NIND", "nInd"], ["NONIND", "nInd"], ["NON-IND", "nInd"], ["NONINDUSTRIAL", "nInd"], ["NON-INDUSTRIAL", "nInd"],
   ["AG", "Ag"], ["AGRICULTURAL", "Ag"],
   ["DE", "Desert"], ["DES", "Desert"], ["DESERT", "Desert"],
   ["WA", "Water"], ["WATER", "Water"],
@@ -34,13 +34,25 @@ const TOKEN_ALIASES = new Map([
   // Common trade codes / tags referenced by table modifiers
   ["RI", "Rich"], ["RICH", "Rich"],
   ["PO", "Poor"], ["POOR", "Poor"],
-  ["BA", "Balkanized"], ["BALK", "Balkanized"], ["BALKANIZED", "Balkanized"],
+
+  // Balkanization synonyms (user input)
+  ["BA", "Balkanized"], ["BALK", "Balkanized"], ["BALKANIZED", "Balkanized"], ["BALKANISATION", "Balkanized"], ["BALKANIZATION", "Balkanized"],
+
+  // Travel zones (for completeness; only Amber/Red currently matter)
   ["AM", "Amber"], ["AMBER", "Amber"],
+  ["RED", "Red"],
+  ["GREEN", "Green"],
 
   // Other condition tokens used by the JSON (buy/sell DMs, column DMs)
-  ["NA", "nAg"], ["NAG", "nAg"], ["NONAG", "nAg"], ["NON-AG", "nAg"],
+  ["NA", "nAg"], ["NAG", "nAg"], ["NONAG", "nAg"], ["NON-AG", "nAg"], ["NON-AGRICULTURAL", "nAg"],
   ["INNER", "Inner"], ["OUTER", "Outer"],
+
+  // Habitability (only Habitable currently used by modifiers)
   ["HAB", "Habitable"], ["HABITABLE", "Habitable"],
+  ["INHAB", "Inhabitable"], ["INHABITABLE", "Inhabitable"],
+
+  // Convenience: allow Gov7 / G7 to imply Balkanized if typed in the profile line
+  ["G7", "Balkanized"], ["GOV7", "Balkanized"], ["GOV-7", "Balkanized"],
 ]);
 
 function normalizeToken(t) {
@@ -117,20 +129,23 @@ function mergeContextOverrides(world) {
   const zone = $("#zone")?.value;
   if (zone) merged.add(zone);
 
-  const hab = $("#habitable")?.value;
-  if (hab) merged.add(hab);
+  const habitability = $("#habitability")?.value;
+  // Only Habitable currently matters to per-column DMs; Inhabitable is retained as inert context.
+  if (habitability) merged.add(habitability);
+  // BUT: keep behavior explicit so you can change later without surprises.
+  // Column DMs currently reference "Habitable" only.
+  // No-op beyond adding the inert tag.
 
-  const amber = $("#travelZone")?.value;
-  if (amber) merged.add(amber);
+  const travelZone = $("#travelZone")?.value;
+  // Green is inert; Amber/Red may matter for multipliers (Amber already does in your tables).
+  if (travelZone) merged.add(travelZone);
 
-  const balk = $("#balkanized")?.value;
-  if (balk) merged.add(balk);
+  const gov = $("#governmentType")?.value;
+  // Only Balkanisation affects current trade modifiers; map to the condition key used by JSON.
+  if (gov === "7") merged.add("Balkanized");
 
-  const rich = $("#rich")?.value;
-  if (rich) merged.add(rich);
-
-  const poor = $("#poor")?.value;
-  if (poor) merged.add(poor);
+  const econ = $("#economicStatus")?.value;
+  if (econ) merged.add(econ);
 
   return merged;
 }
@@ -446,28 +461,29 @@ function openHelpModal() {
     ["Po", "Poor"],
     ["Na", "nAg"],
     ["Ba", "Balkanized"],
-    ["Amber", "Amber"],
-    ["Inner/Outer", "Inner/Outer"],
+    ["Green/Amber/Red", "Travel zone tags"],
+    ["Inner/Outer", "Zone tags"],
+    ["Habitable/Inhabitable", "Habitability tag"],
   ];
 
-  const aliasHtml = aliasPairs.map(([a, b]) => `<code>${a}</code>→<code>${b}</code>`).join(", ");
+  const aliasHtml = aliasPairs.map(([a, b]) => `<code>${a}</code>→<span>${b}</span>`).join(", ");
 
   openModal("Help", `
     <h4>Input</h4>
     <p>Enter <b>UWP</b> first, then any codes/tags (example: <code>A867A74-C Ag Ri In Inner Amber</code>).</p>
-    <p class="muted">Accepted abbreviations: ${aliasHtml}</p>
+    <p class="muted">Accepted abbreviations/tags: ${aliasHtml}</p>
 
-    <h4>Algorithm</h4>
-    <ol>
-      <li>Roll 1D6 for the <b>column</b>. This maps to a trade class per the table.</li>
-      <li>If the rolled trade class is <b>not present</b> in your world’s trade classes, treat it as <b>None</b>.</li>
-      <li>Apply <b>per-column modifiers</b> (DMs) for that trade class when their conditions match (TL bands, Rich, Balkanized, Inner/Outer, Habitable).</li>
-      <li>After applying the DM, re-select the trade class from the adjusted column roll (and again fall back to None if not present on the world).</li>
-      <li>Roll 1D6 for the <b>row</b> within the resulting column to get a merchandise category.</li>
+    <h4>How the app applies the rules</h4>
+    <ul>
+      <li>Roll 1D6 for <b>column</b> (trade class).</li>
+      <li>If the rolled trade class is not present on the world, treat it as <b>None</b>.</li>
+      <li>Apply any matching <b>per-column modifiers</b> (DMs) for that trade class (e.g., TL bands, Rich, Balkanized, Inner/Outer, Habitable).</li>
+      <li>After applying DMs, re-select the trade class from the adjusted column roll (and again fall back to None if not present on the world).</li>
+      <li>Roll 1D6 for <b>row</b> within the resulting column to get a merchandise category.</li>
       <li>Select the merchandise entry whose roll range includes that row roll.</li>
       <li>Compute <b>Buy/Sell DM</b> from the item’s modifiers (based on matching conditions).</li>
       <li>Evaluate <b>Legality</b>: an item with LG X is legal if <b>Law ≤ X</b> (or ≤ the max of a range like <code>3-4</code>).</li>
-    </ol>
+    </ul>
 
     <h4>Per-column modifiers</h4>
     ${renderColumnModifierDoc()}
@@ -475,7 +491,8 @@ function openHelpModal() {
     <h4>Notes</h4>
     <ul>
       <li><b>Trade classes present</b> are only the column classes: Ind, nInd, Ag, Desert, Water, Vacc.</li>
-      <li>Other tokens (e.g. Rich, Poor, Amber, Balkanized, Inner/Outer) are treated as <b>conditions</b> that may affect DMs, multipliers, or buy/sell modifiers.</li>
+      <li>Other tokens (e.g. Rich, Poor, Amber/Red, Inner/Outer, Habitable) are treated as <b>conditions</b> that may affect DMs, multipliers, or Buy/Sell DM.</li>
+      <li>The UI includes a full <b>Government type</b> list for completeness; currently only <b>Balkanisation (7)</b> maps to the <code>Balkanized</code> condition used by the tables.</li>
     </ul>
   `);
 }
