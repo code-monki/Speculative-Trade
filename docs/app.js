@@ -1,32 +1,49 @@
 /*! SPDX-License-Identifier: MIT */
-/* Speculative Trade Generator (no build step)
-   - Loads ./trade-columns.json and ./merchandise.json
-   - Minimal + Advanced modes
-   - Column: roll 1D6 -> trade class (Ind/nInd/Ag/Desert/Water/Vacc), fallback None if not present
-   - Row: roll 1D6 -> merchandise category, then select the 1-3 / 4-5 / 6 item
-*/
+/* ============================================================
+   Speculative Trade Generator
+   Code: MIT License
+   Data: CC BY-SA 4.0 (see repository LICENSE files)
+   ============================================================ */
+
+"use strict";
+
+/* ------------------------------------------------------------
+   Utilities
+------------------------------------------------------------ */
 
 const $ = (sel) => document.querySelector(sel);
+
+function clamp(n, lo, hi) {
+  return Math.max(lo, Math.min(hi, n));
+}
+
+function rollD6(useRandom, promptLabel) {
+  if (useRandom) return 1 + Math.floor(Math.random() * 6);
+
+  const v = window.prompt(`${promptLabel} (enter 1-6)`, "1");
+  const n = Number(v);
+
+  if (!Number.isFinite(n) || n < 1 || n > 6) {
+    throw new Error("Invalid manual die entry.");
+  }
+
+  return n;
+}
+
+/* ------------------------------------------------------------
+   State
+------------------------------------------------------------ */
 
 const STATE = {
   mode: "minimal",
   tradeColumns: null,
   merchandise: null,
-  theme: null,
+  theme: "dark"
 };
 
-const TRADE_CODES = [
-  { key: "Ind", label: "Ind" },
-  { key: "nInd", label: "nInd" },
-  { key: "Ag", label: "Ag" },
-  { key: "Desert", label: "Desert" },
-  { key: "Water", label: "Water" },
-  { key: "Vacc", label: "Vacc" },
-  { key: "Rich", label: "Rich (adv)" },
-  { key: "Poor", label: "Poor (adv)" },
-  { key: "Balkanized", label: "Balkanized (adv)" },
-  { key: "Amber", label: "Amber (adv)" },
-];
+/* ------------------------------------------------------------
+   Theme
+------------------------------------------------------------ */
 
 function setTheme(theme) {
   document.documentElement.dataset.theme = theme;
@@ -35,64 +52,69 @@ function setTheme(theme) {
 }
 
 function toggleTheme() {
-  const cur = STATE.theme ?? "dark";
-  setTheme(cur === "dark" ? "light" : "dark");
+  setTheme(STATE.theme === "dark" ? "light" : "dark");
 }
+
+/* ------------------------------------------------------------
+   Mode
+------------------------------------------------------------ */
 
 function setMode(mode) {
   STATE.mode = mode;
-  $("#modeMinimal").setAttribute("aria-selected", mode === "minimal" ? "true" : "false");
-  $("#modeAdvanced").setAttribute("aria-selected", mode === "advanced" ? "true" : "false");
+  $("#modeMinimal").setAttribute("aria-selected", mode === "minimal");
+  $("#modeAdvanced").setAttribute("aria-selected", mode === "advanced");
   $("#advancedPanel").hidden = mode !== "advanced";
 }
 
-function rollD6(useRandom, promptLabel) {
-  if (useRandom) return 1 + Math.floor(Math.random() * 6);
-  const v = window.prompt(`${promptLabel} (enter 1-6)`, "1");
-  const n = Number(v);
-  if (!Number.isFinite(n) || n < 1 || n > 6) throw new Error("Invalid manual die entry.");
-  return n;
+/* ------------------------------------------------------------
+   Data Loading
+------------------------------------------------------------ */
+
+async function loadTables() {
+  const [cols, merch] = await Promise.all([
+    fetch("./trade-columns.json").then(r => r.json()),
+    fetch("./merchandise.json").then(r => r.json())
+  ]);
+
+  STATE.tradeColumns = cols;
+  STATE.merchandise = merch;
+
+  $("#dataStatus").textContent = `Loaded ${merch.items.length} merchandise entries.`;
 }
 
-function clamp(n, lo, hi) { return Math.max(lo, Math.min(hi, n)); }
+/* ------------------------------------------------------------
+   Trade Logic
+------------------------------------------------------------ */
 
 function selectedTradeCodes() {
   const set = new Set();
+
   document.querySelectorAll("#tradeCodeBox input[type=checkbox]").forEach(cb => {
     if (cb.checked) set.add(cb.value);
   });
-  // Advanced flags (separate controls) also map to conditions
-  if (!$("#advancedPanel").hidden) {
-    if ($("#flagRich").checked) set.add("Rich");
-    if ($("#flagPoor").checked) set.add("Poor");
-    if ($("#flagBalkanized").checked) set.add("Balkanized");
-    if ($("#flagAmber").checked) set.add("Amber");
+
+  if ($("#flagRich")?.checked) set.add("Rich");
+  if ($("#flagPoor")?.checked) set.add("Poor");
+  if ($("#flagBalkanized")?.checked) set.add("Balkanized");
+  if ($("#flagAmber")?.checked) set.add("Amber");
+  if ($("#flagHabitable")?.checked) set.add("Habitable");
+
+  const zone = $("#zone")?.value;
+  if (zone) set.add(zone);
+
+  const tl = Number($("#techLevel")?.value);
+  if (Number.isFinite(tl)) {
+    if (tl <= 4) set.add("TL<=4");
+    if (tl >= 10) set.add("TL>=10");
   }
+
+  const starport = $("#starport")?.value;
+  if (starport) set.add(`${starport}-starport`);
+
   return set;
 }
 
-function currentConditions() {
-  const cond = new Set(selectedTradeCodes());
-
-  const zone = $("#zone").value;
-  if (zone) cond.add(zone); // Inner / Outer
-
-  if ($("#flagHabitable").checked) cond.add("Habitable");
-
-  const tl = Number($("#techLevel").value);
-  if (Number.isFinite(tl)) {
-    if (tl <= 4) cond.add("TL<=4");
-    if (tl >= 10) cond.add("TL>=10");
-  }
-
-  const sp = $("#starport").value;
-  if (sp) cond.add(`${sp}-starport`);
-
-  return cond;
-}
-
 function applyColumnDM(baseRoll, tradeClass, condSet) {
-  if (!STATE.tradeColumns) return baseRoll;
   const col = STATE.tradeColumns.columns[tradeClass];
   if (!col || !col.columnDM) return baseRoll;
 
@@ -100,6 +122,7 @@ function applyColumnDM(baseRoll, tradeClass, condSet) {
   for (const rule of col.columnDM) {
     if (condSet.has(rule.condition)) dm += Number(rule.dm) || 0;
   }
+
   return clamp(baseRoll + dm, 1, 6);
 }
 
@@ -110,194 +133,150 @@ function pickTradeClass(colRoll, worldCodes) {
 }
 
 function pickCategory(tradeClass, rowRoll) {
-  const rows = STATE.tradeColumns.columns[tradeClass].rows;
-  return rows[String(rowRoll)];
+  return STATE.tradeColumns.columns[tradeClass].rows[String(rowRoll)];
 }
 
 function findMerchItem(category, rowRoll) {
   const items = STATE.merchandise.items.filter(it => it.category === category);
-  for (const it of items) {
-    if (rowRoll >= it.roll.min && rowRoll <= it.roll.max) return it;
-  }
-  return null;
-}
-
-function calcBuySellDM(item, condSet) {
-  let total = 0;
-  const applied = [];
-  for (const [k, v] of Object.entries(item.buySellDM || {})) {
-    if (condSet.has(k)) {
-      total += v;
-      applied.push(`${k} ${v >= 0 ? "+" : ""}${v}`);
-    }
-  }
-  // Multipliers are ambiguous in the original; we display them rather than applying.
-  return { total, applied };
+  return items.find(it => rowRoll >= it.roll.min && rowRoll <= it.roll.max);
 }
 
 function legalityStatus(item, lawLevel) {
   if (!item.legalityLG) return { ok: true, text: "—" };
-  const s = String(item.legalityLG);
-  const parts = s.split("-").map(x => Number(x));
+
+  const parts = String(item.legalityLG).split("-").map(Number);
   const lgMax = parts.length === 2 ? Math.max(parts[0], parts[1]) : parts[0];
   const ok = lawLevel <= lgMax;
-  return { ok, text: `LG ${s} (Law ${lawLevel})` };
+
+  return { ok, text: `LG ${item.legalityLG} (Law ${lawLevel})` };
 }
 
-function formatCr(n) {
-  if (!Number.isFinite(n)) return String(n);
-  if (n >= 1000000) return `${(n/1000000).toFixed(1)}MCr`;
-  if (n >= 1000) return `${(n/1000).toFixed(0)}KCr`;
-  return `${n}Cr`;
-}
+/* ------------------------------------------------------------
+   Rendering
+------------------------------------------------------------ */
 
 function renderResults(rows) {
   const host = $("#results");
   host.innerHTML = "";
+
   if (!rows.length) {
-    host.innerHTML = `<div class="muted">No results yet.</div>`;
+    host.innerHTML = '<div class="muted">No results yet.</div>';
     return;
   }
 
   for (const r of rows) {
-    const item = r.item;
-    const dm = r.dm;
-    const legal = r.legal;
-
-    const warn = legal.ok ? "" : " badge-warn";
-    const legalBadge = legal.ok ? "Legal" : "Illegal?";
-
-    const mult = item.multipliers
-      ? Object.entries(item.multipliers).map(([k,v]) => `${k}×${v}`).join(", ")
-      : "—";
+    const legalClass = r.legal.ok ? "" : " badge-warn";
 
     host.insertAdjacentHTML("beforeend", `
       <div class="result">
         <div class="result-head">
           <div>
-            <div class="result-title">${item.name}</div>
-            <div class="muted">${item.category} • row ${item.roll.min}${item.roll.max !== item.roll.min ? "-" + item.roll.max : ""}</div>
+            <div class="result-title">${r.item.name}</div>
+            <div class="muted">${r.tradeClass} → ${r.item.category}</div>
           </div>
-          <div class="badge${warn}" title="${legal.text}">${legalBadge}</div>
-        </div>
-
-        <div class="kv">
-          <div class="k">Column → Category</div><div class="v">${r.tradeClass} (col ${r.colRoll}) → ${item.category} (row ${r.rowRoll})</div>
-          <div class="k">Cr / dTon</div><div class="v">${formatCr(item.crPerDTon)}</div>
-          <div class="k">Allotment</div><div class="v">${item.allotmentDTon ?? "—"} dTon</div>
-          <div class="k">Handling / Notes</div><div class="v">${[item.handling, item.notes].filter(Boolean).join(" • ") || "—"}</div>
-          <div class="k">Buy/Sell DM</div><div class="v">${dm.total} (${dm.applied.length ? dm.applied.join(", ") : "no matches"})</div>
-          <div class="k">Multipliers</div><div class="v">${mult}</div>
-          <div class="k">Legality</div><div class="v">${legal.text}</div>
+          <div class="badge${legalClass}">
+            ${r.legal.ok ? "Legal" : "Illegal?"}
+          </div>
         </div>
       </div>
     `);
   }
 }
 
-async function loadTables() {
-  const [cols, merch] = await Promise.all([
-    fetch("./trade-columns.json").then(r => r.json()),
-    fetch("./merchandise.json").then(r => r.json()),
-  ]);
-  STATE.tradeColumns = cols;
-  STATE.merchandise = merch;
-  $("#dataStatus").textContent = `Loaded ${merch.items.length} merchandise entries.`;
-}
-
-function initTradeCodeUI() {
-  const host = $("#tradeCodeBox");
-  host.innerHTML = "";
-  for (const tc of TRADE_CODES.slice(0, 6)) {
-    host.insertAdjacentHTML("beforeend", `
-      <label class="pill">
-        <input type="checkbox" value="${tc.key}" />
-        <span>${tc.label}</span>
-      </label>
-    `);
-  }
-}
-
-function clearResults() {
-  $("#results").innerHTML = "";
-}
+/* ------------------------------------------------------------
+   Generation
+------------------------------------------------------------ */
 
 function generate() {
-  if (!STATE.tradeColumns || !STATE.merchandise) return;
-
   const useRandom = $("#useRandom").checked;
-  const rollCount = clamp(Number($("#rollCount").value || 0), 1, 50);
-  const lawLevel = clamp(Number($("#lawLevel").value || 0), 0, 15);
+  const rollCount = clamp(Number($("#rollCount").value), 1, 50);
+  const lawLevel = clamp(Number($("#lawLevel").value), 0, 15);
 
   const worldCodes = selectedTradeCodes();
-  const condSet = currentConditions();
+  const condSet = selectedTradeCodes();
 
   const rows = [];
 
   for (let i = 0; i < rollCount; i++) {
-    const baseCol = rollD6(useRandom, `Lot ${i+1}: column roll`);
-    // advanced: column DM applies to the *rolled trade class* column
+    const baseCol = rollD6(useRandom, `Lot ${i + 1}: column roll`);
     let tradeClass = pickTradeClass(baseCol, worldCodes);
 
-    // if advanced mode, apply DM to the chosen column roll (per that column's DM rules)
     let colRoll = baseCol;
+
     if (STATE.mode === "advanced") {
       colRoll = applyColumnDM(baseCol, tradeClass, condSet);
       tradeClass = pickTradeClass(colRoll, worldCodes);
     }
 
-    const rowRoll = rollD6(useRandom, `Lot ${i+1}: row roll`);
+    const rowRoll = rollD6(useRandom, `Lot ${i + 1}: row roll`);
     const category = pickCategory(tradeClass, rowRoll);
     const item = findMerchItem(category, rowRoll);
 
     if (!item) continue;
 
-    const dm = calcBuySellDM(item, condSet);
-    const legal = legalityStatus(item, lawLevel);
-
-    rows.push({ i: i+1, baseCol, colRoll, tradeClass, rowRoll, category, item, dm, legal });
+    rows.push({
+      tradeClass,
+      item,
+      legal: legalityStatus(item, lawLevel)
+    });
   }
 
   renderResults(rows);
 }
 
-function wireEvents() {
-  $("#themeToggle").addEventListener("click", toggleTheme);
-  $("#modeMinimal").addEventListener("click", () => setMode("minimal"));
-  $("#modeAdvanced").addEventListener("click", () => setMode("advanced"));
-  $("#btnGenerate").addEventListener("click", () => {
-    try { generate(); } catch (e) { alert(String(e.message || e)); }
-  });
-  $("#btnClear").addEventListener("click", clearResults);
+/* ------------------------------------------------------------
+   Modal System
+------------------------------------------------------------ */
+
+function openModal(title, html) {
+  $("#modalTitle").textContent = title;
+  $("#modalBody").innerHTML = html;
+  $("#modalOverlay").hidden = false;
 }
 
-(async function main() {
-  // theme
-  const saved = localStorage.getItem("st_theme");
-  if (saved === "light" || saved === "dark") setTheme(saved);
-  else {
-    const prefersLight = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches;
-    setTheme(prefersLight ? "light" : "dark");
-  }
-
-  initTradeCodeUI();
-  wireEvents();
-  setMode("minimal");
-
-  try {
-    await loadTables();
-  } catch (e) {
-    $("#dataStatus").textContent = "Failed to load JSON tables. If running locally, use a static server (or GitHub Pages).";
-    console.error(e);
-  }
-
-  renderResults([]);
-})();
-
+function closeModal() {
+  $("#modalOverlay").hidden = true;
+}
 
 /* ------------------------------------------------------------
-   Legal / NOTICE Modal
+   About / Help / Legal
 ------------------------------------------------------------ */
+
+function openAboutModal() {
+  openModal("About", `
+    <p><strong>Speculative Trade Generator</strong> is a small web utility that loads trade tables from JSON and generates speculative trade lots using a 1D6 column + 1D6 row workflow.</p>
+    <p>
+      The underlying speculative trade table was published by <strong>u/InterceptSpaceCombat</strong> on the Reddit Traveller channel.
+      This project does not claim ownership of the table content; it provides a convenient, structured way to use it.
+    </p>
+    <p>
+      Source: <a href="https://www.reddit.com/r/traveller/comments/1rimleq/speculative_trade_table/" target="_blank" rel="noopener">Reddit thread</a>
+    </p>
+    <p class="muted">Code is MIT; data/transcription and the included source image are CC BY-SA 4.0. See Legal for details.</p>
+  `);
+}
+
+function openHelpModal() {
+  openModal("Help", `
+    <ol>
+      <li>Select the world’s <strong>trade codes</strong> (Ind/nInd/Ag/Desert/Water/Vacc).</li>
+      <li>Set <strong>Number of lots</strong> (how many items to generate).</li>
+      <li>Set <strong>Law Level</strong> if you want legality warnings based on item LG values.</li>
+      <li>
+        Choose dice input:
+        <ul>
+          <li><strong>Random dice</strong> uses RNG.</li>
+          <li>Uncheck it to manually enter each 1D6 roll via prompt.</li>
+        </ul>
+      </li>
+      <li>Click <strong>Generate</strong>.</li>
+    </ol>
+    <p>
+      <strong>Advanced mode</strong> enables column modifiers (DM rules) defined in <code>trade-columns.json</code>
+      (e.g., Rich/Balkanized, TL thresholds, Inner/Outer, etc.).
+    </p>
+  `);
+}
 
 async function openNoticeModal() {
   try {
@@ -309,6 +288,48 @@ async function openNoticeModal() {
       .replaceAll(">", "&gt;");
     openModal("Legal / NOTICE", `<pre class="notice-pre">${escaped}</pre>`);
   } catch (e) {
-    openModal("Legal / NOTICE", `<p>Unable to load NOTICE file.</p>`);
+    openModal("Legal / NOTICE", "<p>Unable to load NOTICE file.</p>");
   }
 }
+
+/* ------------------------------------------------------------
+   Event Wiring
+------------------------------------------------------------ */
+
+function wireUI() {
+  $("#themeToggle").addEventListener("click", toggleTheme);
+
+  $("#btnAbout").addEventListener("click", openAboutModal);
+  $("#btnHelp").addEventListener("click", openHelpModal);
+  $("#btnLegal").addEventListener("click", openNoticeModal);
+
+  $("#modeMinimal").addEventListener("click", () => setMode("minimal"));
+  $("#modeAdvanced").addEventListener("click", () => setMode("advanced"));
+
+  $("#btnGenerate").addEventListener("click", generate);
+  $("#btnClear").addEventListener("click", () => { $("#results").innerHTML = ""; });
+
+  $("#modalClose").addEventListener("click", closeModal);
+  $("#modalOverlay").addEventListener("click", (e) => {
+    if (e.target.id === "modalOverlay") closeModal();
+  });
+}
+
+/* ------------------------------------------------------------
+   Bootstrap
+------------------------------------------------------------ */
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const saved = localStorage.getItem("st_theme");
+  setTheme(saved || "dark");
+
+  wireUI();
+  setMode("minimal");
+
+  try {
+    await loadTables();
+  } catch (e) {
+    $("#dataStatus").textContent = "Failed to load JSON tables.";
+    console.error(e);
+  }
+});

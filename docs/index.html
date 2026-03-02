@@ -2,82 +2,110 @@
 <!-- SPDX-License-Identifier: MIT -->
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Speculative Trade Generator</title>
-  <link rel="stylesheet" href="./styles.css" />
+  <meta name="description" content="Loads trade tables from JSON and generates lots via 1D6 column + 1D6 row.">
+
+  <link rel="stylesheet" href="./styles.css">
 </head>
+
 <body>
-  <header class="site-header">
-    <div class="container header-row">
+  <header class="topbar">
+    <div class="topbar-inner">
       <div class="brand">
-        <div class="brand-title">Speculative Trade Generator</div>
-        <div class="brand-sub">Loads trade tables from JSON and generates lots via 1D6 column + 1D6 row.</div>
+        <h1 class="brand-title">Speculative Trade Generator</h1>
+        <p class="brand-subtitle">Loads trade tables from JSON and generates lots via 1D6 column + 1D6 row.</p>
       </div>
 
-      <div class="header-actions">
-        <button id="themeToggle" class="btn btn-ghost" type="button" title="Toggle light/dark">Theme</button>
-      </div>
+      <nav class="topbar-actions" aria-label="Top navigation">
+        <button id="btnAbout" class="btn btn-ghost" type="button">About</button>
+        <button id="btnHelp" class="btn btn-ghost" type="button">Help</button>
+        <button id="btnLegal" class="btn btn-ghost" type="button">Legal</button>
+        <button id="themeToggle" class="btn btn-ghost" type="button">Theme</button>
+      </nav>
     </div>
   </header>
 
-  <main class="container">
+  <main class="page">
     <section class="card">
-      <div class="card-h">
-        <h2>Mode</h2>
-        <div class="segmented" role="tablist" aria-label="Mode selector">
-          <button class="segbtn" id="modeMinimal" type="button" role="tab" aria-selected="true">Minimal</button>
-          <button class="segbtn" id="modeAdvanced" type="button" role="tab" aria-selected="false">Advanced</button>
+      <div class="card-header">
+        <h2 class="card-title">Mode</h2>
+        <div class="segmented" role="tablist" aria-label="Mode">
+          <button id="modeMinimal" class="segmented-btn" type="button" role="tab" aria-selected="true">Minimal</button>
+          <button id="modeAdvanced" class="segmented-btn" type="button" role="tab" aria-selected="false">Advanced</button>
         </div>
       </div>
 
       <div class="grid-2">
         <div>
-          <h3>World trade codes</h3>
-          <div class="pillbox" id="tradeCodeBox"></div>
-          <div class="hint">Select the world’s trade codes. Column rolls that don’t match a selected trade code fall back to <span class="mono">None</span>.</div>
+          <h3 class="section-title">World trade codes</h3>
+          <div id="tradeCodeBox" class="pill-row">
+            <label class="pill"><input type="checkbox" value="Ind"> Ind</label>
+            <label class="pill"><input type="checkbox" value="nInd"> nInd</label>
+            <label class="pill"><input type="checkbox" value="Ag"> Ag</label>
+            <label class="pill"><input type="checkbox" value="Desert"> Desert</label>
+            <label class="pill"><input type="checkbox" value="Water"> Water</label>
+            <label class="pill"><input type="checkbox" value="Vacc"> Vacc</label>
+          </div>
+          <p class="muted">
+            Select the world’s trade codes. Column rolls that don’t match a selected trade code fall back to None.
+          </p>
         </div>
 
         <div>
-          <h3>Generation</h3>
-          <div class="form-row">
-            <label for="rollCount">Number of lots</label>
-            <input id="rollCount" type="number" min="1" max="50" value="6" />
-          </div>
+          <h3 class="section-title">Generation</h3>
 
-          <div class="form-row">
-            <label for="lawLevel">Law Level (for legality checks)</label>
-            <input id="lawLevel" type="number" min="0" max="15" value="0" />
-          </div>
+          <label class="field">
+            <span class="field-label">Number of lots</span>
+            <input id="rollCount" class="input" type="number" min="1" max="50" value="6">
+          </label>
 
-          <div class="form-row">
-            <label class="check">
-              <input id="useRandom" type="checkbox" checked />
-              <span>Use random dice (otherwise, prompts per roll)</span>
-            </label>
-          </div>
+          <label class="field">
+            <span class="field-label">Law Level (for legality checks)</span>
+            <input id="lawLevel" class="input" type="number" min="0" max="15" value="0">
+          </label>
 
-          <div class="form-actions">
+          <label class="check">
+            <input id="useRandom" type="checkbox" checked>
+            <span>Use random dice (otherwise, prompts per roll)</span>
+          </label>
+
+          <div class="btn-row">
             <button id="btnGenerate" class="btn btn-primary" type="button">Generate</button>
             <button id="btnClear" class="btn btn-ghost" type="button">Clear</button>
           </div>
         </div>
       </div>
 
-      <div id="advancedPanel" class="advanced-panel" hidden>
-        <hr class="sep" />
-        <h3>Advanced inputs</h3>
-
+      <div id="advancedPanel" class="advanced" hidden>
+        <h3 class="section-title">Advanced modifiers</h3>
         <div class="grid-3">
-          <div class="form-row">
-            <label for="techLevel">Tech Level (TL)</label>
-            <input id="techLevel" type="number" min="0" max="20" value="10" />
-          </div>
+          <label class="check"><input id="flagRich" type="checkbox"> <span>Rich</span></label>
+          <label class="check"><input id="flagPoor" type="checkbox"> <span>Poor</span></label>
+          <label class="check"><input id="flagBalkanized" type="checkbox"> <span>Balkanized</span></label>
 
-          <div class="form-row">
-            <label for="starport">Starport</label>
-            <select id="starport">
-              <option value="">(not set)</option>
+          <label class="check"><input id="flagAmber" type="checkbox"> <span>Amber</span></label>
+          <label class="check"><input id="flagHabitable" type="checkbox"> <span>Habitable</span></label>
+
+          <label class="field">
+            <span class="field-label">Zone</span>
+            <select id="zone" class="input">
+              <option value="">—</option>
+              <option value="Outer">Outer</option>
+              <option value="Inner">Inner</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span class="field-label">Tech Level</span>
+            <input id="techLevel" class="input" type="number" min="0" max="15" value="8">
+          </label>
+
+          <label class="field">
+            <span class="field-label">Starport</span>
+            <select id="starport" class="input">
+              <option value="">—</option>
               <option value="A">A</option>
               <option value="B">B</option>
               <option value="C">C</option>
@@ -85,48 +113,41 @@
               <option value="E">E</option>
               <option value="X">X</option>
             </select>
-          </div>
-
-          <div class="form-row">
-            <label for="zone">Zone</label>
-            <select id="zone">
-              <option value="">(not set)</option>
-              <option value="Inner">Inner</option>
-              <option value="Outer">Outer</option>
-            </select>
-          </div>
+          </label>
         </div>
 
-        <div class="pillbox">
-          <label class="check"><input id="flagRich" type="checkbox" /> <span>Rich</span></label>
-          <label class="check"><input id="flagPoor" type="checkbox" /> <span>Poor</span></label>
-          <label class="check"><input id="flagBalkanized" type="checkbox" /> <span>Balkanized</span></label>
-          <label class="check"><input id="flagAmber" type="checkbox" /> <span>Amber</span></label>
-          <label class="check"><input id="flagHabitable" type="checkbox" /> <span>Habitable</span></label>
-        </div>
-
-        <div class="hint">
-          Advanced mode applies the <span class="mono">columnDM</span> rules from <span class="mono">trade-columns.json</span> to the column roll,
-          and applies buy/sell DMs and simple legality checks (LG vs Law Level) on each generated item.
-        </div>
+        <p class="muted">
+          Advanced mode applies column DM rules (as defined in the trade-columns JSON) before determining the final trade-class column.
+        </p>
       </div>
     </section>
 
     <section class="card">
-      <div class="card-h">
-        <h2>Results</h2>
+      <div class="card-header">
+        <h2 class="card-title">Results</h2>
         <div class="muted" id="dataStatus">Loading tables…</div>
       </div>
 
-      <div id="results" class="results"></div>
-    </section>
-
-    <footer class="site-footer">
-      <div class="muted">
-        Tables transcribed from an image source. Verify against the canonical table for production use.
+      <div id="results" class="results">
+        <div class="muted">No results yet.</div>
       </div>
-    </footer>
+
+      <p class="footnote">
+        Tables transcribed from an image source. Verify against the canonical table for production use.
+      </p>
+    </section>
   </main>
+
+  <!-- Modal -->
+  <div id="modalOverlay" class="modal-overlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header">
+        <div id="modalTitle" class="modal-title">Modal</div>
+        <button id="modalClose" class="btn btn-ghost" type="button" aria-label="Close">Close</button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
+    </div>
+  </div>
 
   <script src="./app.js"></script>
 </body>
